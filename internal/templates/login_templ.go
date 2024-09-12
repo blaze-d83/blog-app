@@ -8,7 +8,7 @@ package templates
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-func LoginPage(message, username, password string) templ.Component {
+func LoginPage(errMsg string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
@@ -26,41 +26,20 @@ func LoginPage(message, username, password string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Login Page</title><script src=\"https://unpkg.com/htmx.org@1.9.3\"></script><style>\r\n\t\t\t\tbody {\r\n\t\t\t\t\tfont-family: Arial, sans-serif;\r\n\t\t\t\t\tbackground-color: #f4f4f4;\r\n\t\t\t\t\tdisplay: flex;\r\n\t\t\t\t\tjustify-content: center;\r\n\t\t\t\t\talign-items: center;\r\n\t\t\t\t\theight: 100vh;\r\n\t\t\t\t\tmargin: 0;\r\n\t\t\t\t}\r\n\t\t\t\t.login-container {\r\n\t\t\t\t\tbackground-color: #fff;\r\n\t\t\t\t\tpadding: 30px;\r\n\t\t\t\t\tborder-radius: 8px;\r\n\t\t\t\t\tbox-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);\r\n\t\t\t\t\twidth: 300px;\r\n\t\t\t\t\ttext-align: center;\r\n\t\t\t\t}\r\n\t\t\t\th2 {\r\n\t\t\t\t\tmargin-bottom: 20px;\r\n\t\t\t\t}\r\n\t\t\t\tinput[type=\"text\"],\r\n\t\t\t\tinput[type=\"password\"] {\r\n\t\t\t\t\twidth: 100%;\r\n\t\t\t\t\tpadding: 10px;\r\n\t\t\t\t\tmargin: 8px 0;\r\n\t\t\t\t\tborder: 1px solid #ccc;\r\n\t\t\t\t\tborder-radius: 4px;\r\n\t\t\t\t}\r\n\t\t\t\tinput[type=\"submit\"] {\r\n\t\t\t\t\tbackground-color: #4CAF50;\r\n\t\t\t\t\tcolor: white;\r\n\t\t\t\t\tpadding: 10px 15px;\r\n\t\t\t\t\tborder: none;\r\n\t\t\t\t\tborder-radius: 4px;\r\n\t\t\t\t\tcursor: pointer;\r\n\t\t\t\t\twidth: 100%;\r\n\t\t\t\t}\r\n\t\t\t\tinput[type=\"submit\"]:hover {\r\n\t\t\t\t\tbackground-color: #45a049;\r\n\t\t\t\t}\r\n\t\t\t\t.error-message {\r\n\t\t\t\t\tcolor: red;\r\n\t\t\t\t\tmargin-top: 10px;\r\n\t\t\t\t}\r\n\t\t\t</style></head><body><div class=\"login-container\"><form hx-post=\"/login\" hx-target=\"#error-message\" hx-swap=\"innerHTML\"><label for=\"username\">Username</label> <input type=\"text\" id=\"username\" name=\"username\" placeholder=\"Enter your username\" value=\"{ username }\" required> <label for=\"password\">Password</label> <input type=\"password\" id=\"password\" name=\"password\" placeholder=\"Enter your password\" value=\"{ password }\" required>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Login Page</title><script src=\"https://unpkg.com/htmx.org@1.9.3\"></script><style>\r\n\t\t\t\tbody {\r\n\t\t\t\t\tfont-family: Arial, sans-serif;\r\n\t\t\t\t\tbackground-color: #f4f4f4;\r\n\t\t\t\t\tdisplay: flex;\r\n\t\t\t\t\tjustify-content: center;\r\n\t\t\t\t\talign-items: center;\r\n\t\t\t\t\theight: 100vh;\r\n\t\t\t\t\tmargin: 0;\r\n\t\t\t\t}\r\n\t\t\t\t.login-container {\r\n\t\t\t\t\tbackground-color: #fff;\r\n\t\t\t\t\tpadding: 30px;\r\n\t\t\t\t\tborder-radius: 8px;\r\n\t\t\t\t\tbox-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);\r\n\t\t\t\t\twidth: 300px;\r\n\t\t\t\t\ttext-align: center;\r\n\t\t\t\t}\r\n\t\t\t\th2 {\r\n\t\t\t\t\tmargin-bottom: 20px;\r\n\t\t\t\t}\r\n\t\t\t\tinput[type=\"text\"],\r\n\t\t\t\tinput[type=\"password\"] {\r\n\t\t\t\t\twidth: 100%;\r\n\t\t\t\t\tpadding: 10px;\r\n\t\t\t\t\tmargin: 8px 0;\r\n\t\t\t\t\tborder: 1px solid #ccc;\r\n\t\t\t\t\tborder-radius: 4px;\r\n\t\t\t\t}\r\n\t\t\t\tinput[type=\"submit\"] {\r\n\t\t\t\t\tbackground-color: #4CAF50;\r\n\t\t\t\t\tcolor: white;\r\n\t\t\t\t\tpadding: 10px 15px;\r\n\t\t\t\t\tborder: none;\r\n\t\t\t\t\tborder-radius: 4px;\r\n\t\t\t\t\tcursor: pointer;\r\n\t\t\t\t\twidth: 100%;\r\n\t\t\t\t}\r\n\t\t\t\tinput[type=\"submit\"]:hover {\r\n\t\t\t\t\tbackground-color: #45a049;\r\n\t\t\t\t}\r\n\t\t\t\t.error-message {\r\n\t\t\t\t\tcolor: red;\r\n\t\t\t\t\tmargin-top: 10px;\r\n\t\t\t\t}\r\n\t\t\t</style></head><body><div class=\"login-container\"><form action=\"/admin/login\" method=\"post\"><label for=\"username\">Username</label> <input type=\"text\" id=\"username\" name=\"username\" placeholder=\"Enter your username\" required> <label for=\"password\">Password</label> <input type=\"password\" id=\"password\" name=\"password\" placeholder=\"Enter your password\" required> <button type=\"submit\">Login</button></form><p class=\"error-message\" id=\"error-message\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = SubmitButton().Render(ctx, templ_7745c5c3_Buffer)
+		var templ_7745c5c3_Var2 string
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(errMsg)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/login.templ`, Line: 66, Col: 56}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</form><p class=\"error-message\" id=\"error-message\"></p></div></body></html>")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		return templ_7745c5c3_Err
-	})
-}
-
-func SubmitButton() templ.Component {
-	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
-		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
-		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
-		if !templ_7745c5c3_IsBuffer {
-			defer func() {
-				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
-				if templ_7745c5c3_Err == nil {
-					templ_7745c5c3_Err = templ_7745c5c3_BufErr
-				}
-			}()
-		}
-		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var2 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var2 == nil {
-			templ_7745c5c3_Var2 = templ.NopComponent
-		}
-		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<input type=\"submit\" value=\"Login\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p></div></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

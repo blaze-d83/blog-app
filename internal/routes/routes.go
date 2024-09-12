@@ -4,31 +4,32 @@ import (
 	"github.com/blaze-d83/blog-app/internal/db"
 	"github.com/blaze-d83/blog-app/internal/handlers"
 	"github.com/blaze-d83/blog-app/internal/middleware"
+	"github.com/gorilla/sessions"
+	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 )
 
 // RegisterRoutes sets up the routes for the application.
 func RegisterRoutes(e *echo.Echo, dbInstance *db.Database) {
+	e.Use(session.Middleware(sessions.NewCookieStore([]byte("secret"))))
+
 	// Public routes
 	e.GET("/", handlers.Homepage)
-	e.GET("/posts", handlers.GetPosts(dbInstance))
-	e.GET("/posts/:id", handlers.GetPostByID(dbInstance))
 
-	// Admin routes
+	// Admin login routes
 	admin := e.Group("/admin")
-	admin.GET("/login", handlers.AdminLoginHandler(dbInstance)) // Route for the login page
-	admin.POST("/login", handlers.AdminLoginHandler(dbInstance)) // Route for login POST requests
+	admin.GET("/login", handlers.GetLoginPageHandler()) 
+	admin.POST("/login", handlers.ProcessAdminLoginHandler(dbInstance)) 
 
-	// Apply authentication middleware to all admin routes except login
+
+	// Admin Dashboard and  CRUD routes
 	admin.Use(middleware.AuthMiddleware)
-
-	// Admin CRUD routes
+	admin.GET("/dashboard", handlers.GetAdminDashboard(dbInstance))
 	admin.POST("/posts", handlers.CreatePost(dbInstance))
 	admin.PUT("/posts/:id", handlers.UpdatePost(dbInstance))
 	admin.DELETE("/posts/:id", handlers.DeletePost(dbInstance))
 
 	// Category routes
-	admin.GET("/categories", handlers.GetCategories(dbInstance))
 	admin.POST("/categories", handlers.CreateCategory(dbInstance))
 	admin.PUT("/categories/:id", handlers.UpdateCategory(dbInstance))
 	admin.DELETE("/categories/:id", handlers.DeleteCategory(dbInstance))

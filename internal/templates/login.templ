@@ -1,6 +1,6 @@
 package templates
 
-templ LoginPage(message, username, password string) {
+templ LoginPage(errMsg string) {
 	<html lang="en">
 		<head>
 			<meta charset="UTF-8"/>
@@ -56,19 +56,15 @@ templ LoginPage(message, username, password string) {
 		</head>
 		<body>
 			<div class="login-container">
-				<form hx-post="/login" hx-target="#error-message" hx-swap="innerHTML">
+				<form action="/admin/login" method="post">
 					<label for="username">Username</label>
-					<input type="text" id="username" name="username" placeholder="Enter your username" value="{ username }" required/>
+					<input type="text" id="username" name="username" placeholder="Enter your username"  required/>
 					<label for="password">Password</label>
-					<input type="password" id="password" name="password" placeholder="Enter your password" value="{ password }" required/>
-					@SubmitButton()
+					<input type="password" id="password" name="password" placeholder="Enter your password" required/>
+					<button type="submit">Login</button>
 				</form>
-				<p class="error-message" id="error-message"></p>
+				<p class="error-message" id="error-message">{ errMsg }</p>
 			</div>
 		</body>
 	</html>
-}
-
-templ SubmitButton() {
-	<input type="submit" value="Login"/>
 }
