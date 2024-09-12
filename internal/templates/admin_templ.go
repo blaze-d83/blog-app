@@ -13,7 +13,6 @@ import (
 	"github.com/blaze-d83/blog-app/types"
 )
 
-// AdminDashboard displays the posts and categories on the admin dashboard.
 func AdminDashboard(posts []types.Post, categories []types.Category) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
@@ -32,19 +31,19 @@ func AdminDashboard(posts []types.Post, categories []types.Category) templ.Compo
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Admin Dashboard</title><script src=\"https://unpkg.com/htmx.org@2.0.2\"></script><style>\r\n\t\t\t\tbody {\r\n\t\t\t\t\tfont-family: Arial, sans-serif;\r\n\t\t\t\t\tbackground-color: #f4f4f4;\r\n\t\t\t\t\tmargin: 0;\r\n\t\t\t\t}\r\n\t\t\t\t.dashboard-container {\r\n\t\t\t\t\tpadding: 20px;\r\n\t\t\t\t}\r\n\t\t\t\t.section {\r\n\t\t\t\t\tbackground-color: #fff;\r\n\t\t\t\t\tpadding: 20px;\r\n\t\t\t\t\tmargin-bottom: 20px;\r\n\t\t\t\t\tborder-radius: 8px;\r\n\t\t\t\t\tbox-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);\r\n\t\t\t\t}\r\n\t\t\t\t.section h2 {\r\n\t\t\t\t\tmargin-top: 0;\r\n\t\t\t\t}\r\n\t\t\t\t.form-group {\r\n\t\t\t\t\tmargin-bottom: 15px;\r\n\t\t\t\t}\r\n\t\t\t\t.form-group label {\r\n\t\t\t\t\tdisplay: block;\r\n\t\t\t\t\tmargin-bottom: 5px;\r\n\t\t\t\t}\r\n\t\t\t\t.form-group input, .form-group textarea {\r\n\t\t\t\t\twidth: 100%;\r\n\t\t\t\t\tpadding: 10px;\r\n\t\t\t\t\tborder: 1px solid #ccc;\r\n\t\t\t\t\tborder-radius: 4px;\r\n\t\t\t\t}\r\n\t\t\t\t.form-group button {\r\n\t\t\t\t\tbackground-color: #4CAF50;\r\n\t\t\t\t\tcolor: white;\r\n\t\t\t\t\tpadding: 10px 15px;\r\n\t\t\t\t\tborder: none;\r\n\t\t\t\t\tborder-radius: 4px;\r\n\t\t\t\t\tcursor: pointer;\r\n\t\t\t\t}\r\n\t\t\t\t.form-group button:hover {\r\n\t\t\t\t\tbackground-color: #45a049;\r\n\t\t\t\t}\r\n\t\t\t\t.error-message {\r\n\t\t\t\t\tcolor: red;\r\n\t\t\t\t\tmargin-top: 10px;\r\n\t\t\t\t}\r\n\t\t\t</style></head><body><div class=\"dashboard-container\"><!-- Posts Section --><div class=\"section\"><h2>Posts</h2><form hx-post=\"/admin/posts\" hx-target=\"#posts-list\" hx-swap=\"innerHTML\"><div class=\"form-group\"><label for=\"title\">Title</label> <input type=\"text\" id=\"title\" name=\"title\" required></div><div class=\"form-group\"><label for=\"summary\">Summary</label> <textarea id=\"summary\" name=\"summary\"></textarea></div><div class=\"contents\"><h3>Contents</h3><div class=\"form-group\"><label for=\"background\">Background</label> <textarea id=\"background\" name=\"background\"></textarea></div><div class=\"form-group\"><label for=\"events\">Events</label> <textarea id=\"events\" name=\"events\"></textarea></div><div class=\"form-group\"><label for=\"mainbody\">Main Body</label> <textarea id=\"mainbody\" name=\"mainbody\"></textarea></div><div class=\"form-group\"><label for=\"conclusion\">Conclusion</label> <textarea id=\"conclusion\" name=\"conclusion\"></textarea></div><div class=\"form-group\"><label for=\"sources\">Sources</label> <textarea id=\"sources\" name=\"sources\"></textarea></div></div><div class=\"form-group\"><button type=\"submit\">Create Post</button></div></form><!-- Display existing posts --><div id=\"posts-list\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Admin Dashboard</title><script src=\"https://unpkg.com/htmx.org@2.0.2\"></script><link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css\"><style>\r\n\t\t\t\tbody {\r\n\t\t\t\t\tfont-family: Arial, sans-serif;\r\n\t\t\t\t\tbackground-color: #f7f8fc;\r\n\t\t\t\t\tmargin: 0;\r\n\t\t\t\t\tpadding: 0;\r\n\t\t\t\t\tcolor: #333;\r\n\t\t\t\t}\r\n\t\t\t\t.container {\r\n\t\t\t\t\tmax-width: 1200px;\r\n\t\t\t\t\tmargin: 0 auto;\r\n\t\t\t\t\tpadding: 20px;\r\n\t\t\t\t}\r\n\t\t\t\t.dashboard-header {\r\n\t\t\t\t\tdisplay: flex;\r\n\t\t\t\t\tjustify-content: space-between;\r\n\t\t\t\t\talign-items: center;\r\n\t\t\t\t\tmargin-bottom: 20px;\r\n\t\t\t\t}\r\n\t\t\t\t.dashboard-header h1 {\r\n\t\t\t\t\tcolor: #4A90E2;\r\n\t\t\t\t}\r\n\t\t\t\t.section {\r\n\t\t\t\t\tbackground-color: #fff;\r\n\t\t\t\t\tpadding: 20px;\r\n\t\t\t\t\tborder-radius: 8px;\r\n\t\t\t\t\tbox-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);\r\n\t\t\t\t\tmargin-bottom: 20px;\r\n\t\t\t\t}\r\n\t\t\t\t.section h2 {\r\n\t\t\t\t\tcolor: #333;\r\n\t\t\t\t\tborder-bottom: 2px solid #4A90E2;\r\n\t\t\t\t\tpadding-bottom: 10px;\r\n\t\t\t\t}\r\n\t\t\t\t.form-group {\r\n\t\t\t\t\tmargin-bottom: 20px;\r\n\t\t\t\t}\r\n\t\t\t\t.form-group label {\r\n\t\t\t\t\tfont-weight: bold;\r\n\t\t\t\t\tcolor: #555;\r\n\t\t\t\t\tdisplay: block;\r\n\t\t\t\t\tmargin-bottom: 5px;\r\n\t\t\t\t}\r\n\t\t\t\t.form-group input,\r\n\t\t\t\t.form-group textarea {\r\n\t\t\t\t\twidth: 100%;\r\n\t\t\t\t\tpadding: 12px;\r\n\t\t\t\t\tborder: 1px solid #ddd;\r\n\t\t\t\t\tborder-radius: 4px;\r\n\t\t\t\t\tfont-size: 16px;\r\n\t\t\t\t}\r\n\t\t\t\t.form-group button {\r\n\t\t\t\t\tbackground-color: #4A90E2;\r\n\t\t\t\t\tcolor: white;\r\n\t\t\t\t\tpadding: 12px 20px;\r\n\t\t\t\t\tborder: none;\r\n\t\t\t\t\tborder-radius: 4px;\r\n\t\t\t\t\tfont-size: 16px;\r\n\t\t\t\t\tcursor: pointer;\r\n\t\t\t\t\ttransition: background-color 0.3s ease;\r\n\t\t\t\t}\r\n\t\t\t\t.form-group button:hover {\r\n\t\t\t\t\tbackground-color: #357ABD;\r\n\t\t\t\t}\r\n\t\t\t\t.posts-list,\r\n\t\t\t\t.categories-list {\r\n\t\t\t\t\tdisplay: grid;\r\n\t\t\t\t\tgrid-template-columns: repeat(auto-fit, minmax(300px, 1fr));\r\n\t\t\t\t\tgap: 20px;\r\n\t\t\t\t}\r\n\t\t\t\t.post-card,\r\n\t\t\t\t.category-card {\r\n\t\t\t\t\tbackground-color: #fff;\r\n\t\t\t\t\tborder-radius: 8px;\r\n\t\t\t\t\tbox-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);\r\n\t\t\t\t\tpadding: 15px;\r\n\t\t\t\t\ttransition: transform 0.2s;\r\n\t\t\t\t}\r\n\t\t\t\t.post-card:hover,\r\n\t\t\t\t.category-card:hover {\r\n\t\t\t\t\ttransform: translateY(-5px);\r\n\t\t\t\t}\r\n\t\t\t\t.post-card h3,\r\n\t\t\t\t.category-card h3 {\r\n\t\t\t\t\tcolor: #4A90E2;\r\n\t\t\t\t}\r\n\t\t\t\t.actions {\r\n\t\t\t\t\tdisplay: flex;\r\n\t\t\t\t\tjustify-content: space-between;\r\n\t\t\t\t\tmargin-top: 10px;\r\n\t\t\t\t}\r\n\t\t\t\t.actions button {\r\n\t\t\t\t\tbackground-color: #f44336;\r\n\t\t\t\t\tcolor: white;\r\n\t\t\t\t\tpadding: 10px;\r\n\t\t\t\t\tborder: none;\r\n\t\t\t\t\tborder-radius: 4px;\r\n\t\t\t\t\tcursor: pointer;\r\n\t\t\t\t}\r\n\t\t\t\t.actions button.update {\r\n\t\t\t\t\tbackground-color: #4CAF50;\r\n\t\t\t\t}\r\n\t\t\t\t.actions button:hover {\r\n\t\t\t\t\topacity: 0.9;\r\n\t\t\t\t}\r\n\t\t\t</style></head><body><div class=\"container\"><!-- Header Section --><div class=\"dashboard-header\"><h1>Admin Dashboard</h1></div><!-- Posts Section --><div class=\"section\"><h2>Posts</h2><form hx-post=\"/admin/posts\" hx-target=\"#posts-list\" hx-swap=\"innerHTML\"><div class=\"form-group\"><label for=\"title\">Title</label> <input type=\"text\" id=\"title\" name=\"title\" required></div><div class=\"form-group\"><label for=\"summary\">Summary</label> <textarea id=\"summary\" name=\"summary\"></textarea></div><div class=\"form-group\"><label for=\"background\">Background</label> <textarea id=\"background\" name=\"background\"></textarea></div><div class=\"form-group\"><label for=\"events\">Events</label> <textarea id=\"events\" name=\"events\"></textarea></div><div class=\"form-group\"><label for=\"mainbody\">Main Body</label> <textarea id=\"mainbody\" name=\"mainbody\"></textarea></div><div class=\"form-group\"><label for=\"conclusion\">Conclusion</label> <textarea id=\"conclusion\" name=\"conclusion\"></textarea></div><div class=\"form-group\"><label for=\"sources\">Sources</label> <textarea id=\"sources\" name=\"sources\"></textarea></div><div class=\"form-group\"><button type=\"submit\">Create Post</button></div></form><!-- Display existing posts --><div id=\"posts-list\" class=\"posts-list\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		for _, post := range posts {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div><h3>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"post-card\"><h3>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var2 string
 			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(post.Title)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/admin.templ`, Line: 110, Col: 24}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/admin.templ`, Line: 169, Col: 24}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 			if templ_7745c5c3_Err != nil {
@@ -57,88 +56,88 @@ func AdminDashboard(posts []types.Post, categories []types.Category) templ.Compo
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(post.Summary)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/admin.templ`, Line: 111, Col: 25}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/admin.templ`, Line: 170, Col: 25}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p><form hx-put=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p><div class=\"actions\"><form hx-put=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs("/admin/posts/" + fmt.Sprintf("%d", post.ID))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/admin.templ`, Line: 112, Col: 67}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/admin.templ`, Line: 172, Col: 68}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-target=\"#posts-list\" hx-swap=\"innerHTML\"><button type=\"submit\">Update</button></form><form hx-delete=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-target=\"#posts-list\" hx-swap=\"innerHTML\"><button class=\"update\" type=\"submit\">Update</button></form><form hx-delete=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var5 string
 			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs("/admin/posts/" + fmt.Sprintf("%d", post.ID))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/admin.templ`, Line: 115, Col: 70}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/admin.templ`, Line: 175, Col: 71}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-target=\"#posts-list\" hx-swap=\"innerHTML\"><button type=\"submit\">Delete</button></form></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-target=\"#posts-list\" hx-swap=\"innerHTML\"><button type=\"submit\">Delete</button></form></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><!-- Categories Section --><div class=\"section\"><h2>Categories</h2><form hx-post=\"/admin/categories\" hx-target=\"#categories-list\" hx-swap=\"innerHTML\"><div class=\"form-group\"><label for=\"name\">Name</label> <input type=\"text\" id=\"name\" name=\"name\" required></div><div class=\"form-group\"><button type=\"submit\">Create Category</button></div></form><!-- Display existing categories --><div id=\"categories-list\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><!-- Categories Section --><div class=\"section\"><h2>Categories</h2><form hx-post=\"/admin/categories\" hx-target=\"#categories-list\" hx-swap=\"innerHTML\"><div class=\"form-group\"><label for=\"name\">Name</label> <input type=\"text\" id=\"name\" name=\"name\" required></div><div class=\"form-group\"><button type=\"submit\">Create Category</button></div></form><!-- Display existing categories --><div id=\"categories-list\" class=\"categories-list\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		for _, category := range categories {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div><h3>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"category-card\"><h3>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var6 string
 			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(category.Name)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/admin.templ`, Line: 138, Col: 27}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/admin.templ`, Line: 199, Col: 27}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h3><form hx-put=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h3><div class=\"actions\"><form hx-put=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var7 string
 			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs("/admin/categories/" + fmt.Sprintf("%d", category.ID))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/admin.templ`, Line: 139, Col: 76}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/admin.templ`, Line: 201, Col: 77}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-target=\"#categories-list\" hx-swap=\"innerHTML\"><button type=\"submit\">Update</button></form><form hx-delete=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-target=\"#categories-list\" hx-swap=\"innerHTML\"><button class=\"update\" type=\"submit\">Update</button></form><form hx-delete=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var8 string
 			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs("/admin/categories/" + fmt.Sprintf("%d", category.ID))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/admin.templ`, Line: 142, Col: 79}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/admin.templ`, Line: 204, Col: 80}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-target=\"#categories-list\" hx-swap=\"innerHTML\"><button type=\"submit\">Delete</button></form></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-target=\"#categories-list\" hx-swap=\"innerHTML\"><button type=\"submit\">Delete</button></form></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
