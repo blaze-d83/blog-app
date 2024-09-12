@@ -32,7 +32,7 @@ func AdminDashboard(posts []types.Post, categories []types.Category) templ.Compo
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Admin Dashboard</title><script src=\"https://unpkg.com/htmx.org@2.0.2\"></script><style>\r\n\t\t\t\tbody {\r\n\t\t\t\t\tfont-family: Arial, sans-serif;\r\n\t\t\t\t\tbackground-color: #f4f4f4;\r\n\t\t\t\t\tmargin: 0;\r\n\t\t\t\t}\r\n\t\t\t\t.dashboard-container {\r\n\t\t\t\t\tpadding: 20px;\r\n\t\t\t\t}\r\n\t\t\t\t.section {\r\n\t\t\t\t\tbackground-color: #fff;\r\n\t\t\t\t\tpadding: 20px;\r\n\t\t\t\t\tmargin-bottom: 20px;\r\n\t\t\t\t\tborder-radius: 8px;\r\n\t\t\t\t\tbox-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);\r\n\t\t\t\t}\r\n\t\t\t\t.section h2 {\r\n\t\t\t\t\tmargin-top: 0;\r\n\t\t\t\t}\r\n\t\t\t\t.form-group {\r\n\t\t\t\t\tmargin-bottom: 15px;\r\n\t\t\t\t}\r\n\t\t\t\t.form-group label {\r\n\t\t\t\t\tdisplay: block;\r\n\t\t\t\t\tmargin-bottom: 5px;\r\n\t\t\t\t}\r\n\t\t\t\t.form-group input, .form-group textarea {\r\n\t\t\t\t\twidth: 100%;\r\n\t\t\t\t\tpadding: 10px;\r\n\t\t\t\t\tborder: 1px solid #ccc;\r\n\t\t\t\t\tborder-radius: 4px;\r\n\t\t\t\t}\r\n\t\t\t\t.form-group button {\r\n\t\t\t\t\tbackground-color: #4CAF50;\r\n\t\t\t\t\tcolor: white;\r\n\t\t\t\t\tpadding: 10px 15px;\r\n\t\t\t\t\tborder: none;\r\n\t\t\t\t\tborder-radius: 4px;\r\n\t\t\t\t\tcursor: pointer;\r\n\t\t\t\t}\r\n\t\t\t\t.form-group button:hover {\r\n\t\t\t\t\tbackground-color: #45a049;\r\n\t\t\t\t}\r\n\t\t\t\t.error-message {\r\n\t\t\t\t\tcolor: red;\r\n\t\t\t\t\tmargin-top: 10px;\r\n\t\t\t\t}\r\n\t\t\t</style></head><body><div class=\"dashboard-container\"><!-- Posts Section --><div class=\"section\"><h2>Posts</h2><form hx-post=\"/admin/posts\" hx-target=\"#posts-list\" hx-swap=\"innerHTML\"><div class=\"form-group\"><label for=\"title\">Title</label> <input type=\"text\" id=\"title\" name=\"title\" required></div><div class=\"form-group\"><label for=\"summary\">Summary</label> <textarea id=\"summary\" name=\"summary\"></textarea></div><div class=\"form-group\"><label for=\"content\">Content</label> <textarea id=\"content\" name=\"content\"></textarea></div><div class=\"form-group\"><button type=\"submit\">Create Post</button></div></form><!-- Display existing posts --><div id=\"posts-list\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Admin Dashboard</title><script src=\"https://unpkg.com/htmx.org@2.0.2\"></script><style>\r\n\t\t\t\tbody {\r\n\t\t\t\t\tfont-family: Arial, sans-serif;\r\n\t\t\t\t\tbackground-color: #f4f4f4;\r\n\t\t\t\t\tmargin: 0;\r\n\t\t\t\t}\r\n\t\t\t\t.dashboard-container {\r\n\t\t\t\t\tpadding: 20px;\r\n\t\t\t\t}\r\n\t\t\t\t.section {\r\n\t\t\t\t\tbackground-color: #fff;\r\n\t\t\t\t\tpadding: 20px;\r\n\t\t\t\t\tmargin-bottom: 20px;\r\n\t\t\t\t\tborder-radius: 8px;\r\n\t\t\t\t\tbox-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);\r\n\t\t\t\t}\r\n\t\t\t\t.section h2 {\r\n\t\t\t\t\tmargin-top: 0;\r\n\t\t\t\t}\r\n\t\t\t\t.form-group {\r\n\t\t\t\t\tmargin-bottom: 15px;\r\n\t\t\t\t}\r\n\t\t\t\t.form-group label {\r\n\t\t\t\t\tdisplay: block;\r\n\t\t\t\t\tmargin-bottom: 5px;\r\n\t\t\t\t}\r\n\t\t\t\t.form-group input, .form-group textarea {\r\n\t\t\t\t\twidth: 100%;\r\n\t\t\t\t\tpadding: 10px;\r\n\t\t\t\t\tborder: 1px solid #ccc;\r\n\t\t\t\t\tborder-radius: 4px;\r\n\t\t\t\t}\r\n\t\t\t\t.form-group button {\r\n\t\t\t\t\tbackground-color: #4CAF50;\r\n\t\t\t\t\tcolor: white;\r\n\t\t\t\t\tpadding: 10px 15px;\r\n\t\t\t\t\tborder: none;\r\n\t\t\t\t\tborder-radius: 4px;\r\n\t\t\t\t\tcursor: pointer;\r\n\t\t\t\t}\r\n\t\t\t\t.form-group button:hover {\r\n\t\t\t\t\tbackground-color: #45a049;\r\n\t\t\t\t}\r\n\t\t\t\t.error-message {\r\n\t\t\t\t\tcolor: red;\r\n\t\t\t\t\tmargin-top: 10px;\r\n\t\t\t\t}\r\n\t\t\t</style></head><body><div class=\"dashboard-container\"><!-- Posts Section --><div class=\"section\"><h2>Posts</h2><form hx-post=\"/admin/posts\" hx-target=\"#posts-list\" hx-swap=\"innerHTML\"><div class=\"form-group\"><label for=\"title\">Title</label> <input type=\"text\" id=\"title\" name=\"title\" required></div><div class=\"form-group\"><label for=\"summary\">Summary</label> <textarea id=\"summary\" name=\"summary\"></textarea></div><div class=\"contents\"><h3>Contents</h3><div class=\"form-group\"><label for=\"background\">Background</label> <textarea id=\"background\" name=\"background\"></textarea></div><div class=\"form-group\"><label for=\"events\">Events</label> <textarea id=\"events\" name=\"events\"></textarea></div><div class=\"form-group\"><label for=\"mainbody\">Main Body</label> <textarea id=\"mainbody\" name=\"mainbody\"></textarea></div><div class=\"form-group\"><label for=\"conclusion\">Conclusion</label> <textarea id=\"conclusion\" name=\"conclusion\"></textarea></div><div class=\"form-group\"><label for=\"sources\">Sources</label> <textarea id=\"sources\" name=\"sources\"></textarea></div></div><div class=\"form-group\"><button type=\"submit\">Create Post</button></div></form><!-- Display existing posts --><div id=\"posts-list\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -44,7 +44,7 @@ func AdminDashboard(posts []types.Post, categories []types.Category) templ.Compo
 			var templ_7745c5c3_Var2 string
 			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(post.Title)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/admin.templ`, Line: 91, Col: 24}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/admin.templ`, Line: 110, Col: 24}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 			if templ_7745c5c3_Err != nil {
@@ -57,7 +57,7 @@ func AdminDashboard(posts []types.Post, categories []types.Category) templ.Compo
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(post.Summary)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/admin.templ`, Line: 92, Col: 25}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/admin.templ`, Line: 111, Col: 25}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -70,7 +70,7 @@ func AdminDashboard(posts []types.Post, categories []types.Category) templ.Compo
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs("/admin/posts/" + fmt.Sprintf("%d", post.ID))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/admin.templ`, Line: 93, Col: 67}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/admin.templ`, Line: 112, Col: 67}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
@@ -83,7 +83,7 @@ func AdminDashboard(posts []types.Post, categories []types.Category) templ.Compo
 			var templ_7745c5c3_Var5 string
 			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs("/admin/posts/" + fmt.Sprintf("%d", post.ID))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/admin.templ`, Line: 96, Col: 70}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/admin.templ`, Line: 115, Col: 70}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
@@ -106,7 +106,7 @@ func AdminDashboard(posts []types.Post, categories []types.Category) templ.Compo
 			var templ_7745c5c3_Var6 string
 			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(category.Name)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/admin.templ`, Line: 119, Col: 27}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/admin.templ`, Line: 138, Col: 27}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
@@ -119,7 +119,7 @@ func AdminDashboard(posts []types.Post, categories []types.Category) templ.Compo
 			var templ_7745c5c3_Var7 string
 			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs("/admin/categories/" + fmt.Sprintf("%d", category.ID))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/admin.templ`, Line: 120, Col: 76}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/admin.templ`, Line: 139, Col: 76}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {
@@ -132,7 +132,7 @@ func AdminDashboard(posts []types.Post, categories []types.Category) templ.Compo
 			var templ_7745c5c3_Var8 string
 			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs("/admin/categories/" + fmt.Sprintf("%d", category.ID))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/admin.templ`, Line: 123, Col: 79}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/admin.templ`, Line: 142, Col: 79}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 			if templ_7745c5c3_Err != nil {

@@ -9,6 +9,7 @@ import (
 	"github.com/blaze-d83/blog-app/internal/db"
 	"github.com/blaze-d83/blog-app/internal/templates"
 	"github.com/blaze-d83/blog-app/types"
+	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 )
 
@@ -47,17 +48,33 @@ func GetAdminDashboard(dbInstance *db.Database) echo.HandlerFunc {
 
 func CreatePost(dbInstance *db.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
+
+		sess, _ := session.Get("session", c)
+		adminID := sess.Values["admin_id"]
+		if adminID == nil {
+			return c.String(http.StatusUnauthorized, "Unauthorized: Admin not logged in")
+		}
+
 		title := c.FormValue("title")
 		summary := c.FormValue("summary")
-		content := c.FormValue("content")
+		background := c.FormValue("background")
+		events := c.FormValue("events")
+		mainbody := c.FormValue("mainbody")
+		conclusion := c.FormValue("conclusion")
+		sources := c.FormValue("sources")
 
 		post := types.Post{
 			Title:   title,
 			Summary: summary,
 			Content: types.Content{
-				MainBody: content,
+				Background: background,
+				Events:     events,
+				MainBody:   mainbody,
+				Conclusion: conclusion,
+				Sources:    sources,
 			},
-			Date: time.Now(),
+			AdminID: adminID.(uint),
+			Date:    time.Now(),
 		}
 
 		if err := dbInstance.DB.Create(&post).Error; err != nil {
