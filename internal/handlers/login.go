@@ -6,8 +6,8 @@ import (
 	"log"
 	"net/http"
 
+	components "github.com/blaze-d83/blog-app/internal/components/login"
 	"github.com/blaze-d83/blog-app/internal/db"
-	"github.com/blaze-d83/blog-app/internal/templates"
 	"github.com/blaze-d83/blog-app/types"
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
@@ -22,7 +22,7 @@ func RenderLoginPage(c echo.Context, errMsg string) error {
 		w.Write([]byte(fmt.Sprintf(`<p class="error-message">%s</p>`, errMsg)))
 		return nil
 	}
-	loginPage := templates.LoginPage(errMsg)
+	loginPage := components.LoginPage(errMsg)
 	err := loginPage.Render(context.Background(), w)
 	if err != nil {
 		http.Error(w, "Failed to render login page", http.StatusInternalServerError)

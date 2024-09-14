@@ -1,6 +1,6 @@
 package types
 
-import "time"
+import	"time"
 
 type Admin struct {
 	ID       uint   `gorm:"primaryKey;autoIncrement"`
@@ -34,3 +34,4 @@ type Category struct {
 	Name  string `gorm:"unique;not null"`
 	Posts []Post `gorm:"many2many:post_categories"`
 }
+
