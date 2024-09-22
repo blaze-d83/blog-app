@@ -8,6 +8,9 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+type Handlers struct {
+}
+
 // RegisterRoutes sets up the routes for the application.
 func RegisterRoutes(e *echo.Echo, dbInstance *db.Database) {
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte("secret"))))

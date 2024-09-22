@@ -11,9 +11,9 @@ import (
 	"time"
 
 	"github.com/blaze-d83/blog-app/blog-app/cmd"
-	"github.com/blaze-d83/blog-app/internal/config"
 	"github.com/blaze-d83/blog-app/internal/db"
 	"github.com/blaze-d83/blog-app/internal/routes"
+	service "github.com/blaze-d83/blog-app/internal/services/logger"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -42,7 +42,7 @@ func main() {
 
 	e := echo.New()
 
-	customLoggerConfig := config.GetCustomLoggerConfig(e)
+	customLoggerConfig := service.GetCustomLoggerConfig(e)
 
 	e.Use(middleware.LoggerWithConfig(*customLoggerConfig))
 	e.Use(middleware.Recover())

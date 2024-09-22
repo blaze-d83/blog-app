@@ -6,8 +6,8 @@ import (
 	"log"
 	"net/http"
 
-	components "github.com/blaze-d83/blog-app/internal/components/login"
 	"github.com/blaze-d83/blog-app/internal/db"
+	"github.com/blaze-d83/blog-app/static/components"
 	"github.com/blaze-d83/blog-app/types"
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"

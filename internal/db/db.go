@@ -22,7 +22,7 @@ func InitDB() *Database {
 		log.Fatal("Failed to initialize database: ", err)
 	}
 
-	err = db.DB.AutoMigrate(types.Admin{}, types.Category{}, types.Content{}, types.Post{})
+	err = db.DB.AutoMigrate(types.Admin{}, types.Category{}, types.Post{})
 	if err != nil {
 		log.Fatal("Failed to run migrations", err)
 	}
@@ -30,7 +30,7 @@ func InitDB() *Database {
 
 }
 
-func NewMySQLStorage(dsn string) (*Database, error)  {
+func NewMySQLStorage(dsn string) (*Database, error) {
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return nil, fmt.Errorf("failed to open MySQL connection: %w", err)
