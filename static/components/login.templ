@@ -38,6 +38,7 @@ css FormInputStyle() {
 
 css ErrorMsgStyle() {
 	margin-top: 10px;
+	color: { red };
 }
 
 css LabelFont() {
@@ -56,7 +57,7 @@ templ FormInput(labelText string, inputType string, inputName string) {
 }
 
 templ SubmitButton(text string) {
-	<button class={ "button", LoginButtonStyle() }>
+	<button class={ "submit", LoginButtonStyle() }>
 		{ text }
 	</button>
 }
@@ -64,7 +65,13 @@ templ SubmitButton(text string) {
 templ LoginForm(errMsg string) {
 	<div class={ "login-container", LoginContainerStyle() }>
 		@FormHeader("Login")
-		<form hx-post="/admin/login" hx-trigger="submit" hx-target="#error-message" hx-swap="outerHTML">
+		<form
+			hx-post="/admin/login"
+			hx-trigger="submit"
+			hx-target="#error-message"
+			hx-swap="outerHTML"
+			hx-on="htmx:afterRequest: if (event.detail.xhr.status == 200) {window.location.href = '/admin/dashboard';}"
+		>
 			@FormInput("Username", "text", "username")
 			@FormInput("Password", "password", "password")
 			@SubmitButton("Login")
@@ -98,4 +105,3 @@ templ LoginPage(errorMsg string) {
 		</body>
 	</html>
 }
-

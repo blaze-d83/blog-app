@@ -29,8 +29,8 @@
             - [x] DELETE post handler
             - [x] DELETE category handler
     - [ ] User
-            - [ ] GET List of posts handler
-            - [ ] GET post by id handler
+            - [x] GET List of posts handler
+            - [x] GET post by id handler
 - [ ] Add Service to sort posts by date of cases
 - [ ] Setup routes for handlers
 - [ ] Write a run function inside main file for error logging

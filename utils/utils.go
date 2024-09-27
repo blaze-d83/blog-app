@@ -2,6 +2,7 @@ package utils
 
 import (
 	"log"
+	"strconv"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -12,4 +13,9 @@ func HashPassword(p string) []byte {
 		log.Fatalf("failed to hash password: %v", err)
 	}
 	return hashPass
+}
+
+func GetInt(param string) uint  {
+	id, _ := strconv.Atoi(param)
+	return (uint(id))
 }

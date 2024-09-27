@@ -1,165 +1,130 @@
 package handlers
 
 import (
+	"context"
 	"net/http"
-	"strconv"
 
 	"github.com/blaze-d83/blog-app/internal/services"
+	"github.com/blaze-d83/blog-app/static/components"
 	"github.com/blaze-d83/blog-app/types"
+	"github.com/blaze-d83/blog-app/utils"
 	"github.com/labstack/echo/v4"
 )
 
 type AdminHandler struct {
-	AdminService services.AdminService
+	services.AdminService
 }
 
-func NewHandler(service services.AdminService) *AdminHandler{
-	return &AdminHandler{
-		AdminService: service,
+func RenderAdminDashboard(c echo.Context) error {
+	w := c.Response().Writer
+	adminPage := components.AdminDashboard()
+	err := adminPage.Render(context.Background(), w)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to render admin dashboard"})
+	}
+	return nil
+}
+
+func (h *AdminHandler) GetListOfPosts() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		posts, err := h.AdminService.GetAllPostsForAdmin()
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve posts"})
+		}
+		return c.JSON(http.StatusOK, posts)
 	}
 }
 
-func (h *AdminHandler) AdminGetListOfPosts() echo.HandlerFunc {
+func (h *AdminHandler) GetPostToPreview() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		r := c.Request()
-		if r.Method == http.MethodGet {
-			posts, err := h.AdminService.GetAllPostsForAdmin()
-			if err != nil {
-				return c.JSON(http.StatusNotFound, err)
-			}
-			return c.JSON(http.StatusOK, posts)
+		id := utils.GetInt(c.Param("id"))
+		post, err := h.AdminService.GetPostByID(id)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve post to preview"})
 		}
-		return c.JSON(http.StatusMethodNotAllowed, r.Method)
+		return c.JSON(http.StatusOK, post)
 	}
 }
 
-func (h *AdminHandler) AdminGetPostToPreview() echo.HandlerFunc {
+func (h *AdminHandler) CreatePost() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		r := c.Request()
-		if r.Method == http.MethodGet {
-			id, err := strconv.Atoi(c.Param("id"))
-			if err != nil {
-				return err
-			}
-			post, err := h.AdminService.GetPostByID(uint(id))
-			if err != nil {
-				return c.JSON(http.StatusNotFound, err)
-			}
-			return c.JSON(http.StatusOK, post)
+		post := types.Post{
+			Title:       c.FormValue("title"),
+			Citation:    c.FormValue("citation"),
+			Summary:     c.FormValue("summary"),
+			Content:     c.FormValue("content"),
+			PhotoIcon:   c.FormValue("photo-link"),
+			BannerImage: c.FormValue("banner-link"),
 		}
-		return c.JSON(http.StatusMethodNotAllowed, r.Method)
+		err := h.AdminService.CreatePost(post)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to create post"})
+		}
+		return c.JSON(http.StatusCreated, post.Title)
 	}
 }
 
-func (h *AdminHandler) AdminCreatePost() echo.HandlerFunc {
+func (h *AdminHandler) UpdatePost() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		r := c.Request()
-		if r.Method == http.MethodPost {
-			post := types.Post{
-				Title:       c.FormValue("title"),
-				Citation:    c.FormValue("citation"),
-				Summary:     c.FormValue("summary"),
-				Content:     c.FormValue("content"),
-				PhotoIcon:   c.FormValue("photo-link"),
-				BannerImage: c.FormValue("banner-link"),
-			}
-			err := h.AdminService.CreatePost(post)
-			if err != nil {
-				return c.JSON(http.StatusUnauthorized, err)
-			}
-			return c.JSON(http.StatusCreated, post.Title)
+		id := utils.GetInt(c.Param("id"))
+		post := types.Post{
+			Title:       c.FormValue("title"),
+			Citation:    c.FormValue("citation"),
+			Summary:     c.FormValue("summary"),
+			Content:     c.FormValue("content"),
+			PhotoIcon:   c.FormValue("photo-link"),
+			BannerImage: c.FormValue("banner-link"),
 		}
-		return c.JSON(http.StatusMethodNotAllowed, r.Method)
+
+		err := h.AdminService.UpdatePost(id, post)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve post to update"})
+		}
+		return c.JSON(http.StatusOK, map[string]string{"message": "Post updated successfully"})
 	}
 }
 
-func (h *AdminHandler) AdminUpdatePost() echo.HandlerFunc {
+func (h *AdminHandler) DeletePost() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		r := c.Request()
-		if r.Method == http.MethodPut {
-			id, err := strconv.Atoi(c.Param("id"))
-			if err != nil {
-				return err
-			}
-			post := types.Post{
-				Title:       c.FormValue("title"),
-				Citation:    c.FormValue("citation"),
-				Summary:     c.FormValue("summary"),
-				Content:     c.FormValue("content"),
-				PhotoIcon:   c.FormValue("photo-link"),
-				BannerImage: c.FormValue("banner-link"),
-			}
-
-			err = h.AdminService.UpdatePost(uint(id), post)
-			if err != nil {
-				return c.JSON(http.StatusNotFound, err)
-			}
+		id := utils.GetInt(c.Param("id"))
+		err := h.AdminService.DeletePost(id)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve post to delete"})
 		}
-		return c.JSON(http.StatusMethodNotAllowed, r.Method)
+		return c.JSON(http.StatusOK, map[string]string{"message": "Post deleted successfully"})
 	}
 }
 
-func (h *AdminHandler) AdminDeletePost() echo.HandlerFunc {
+func (h *AdminHandler) GetListOfCategories() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		r := c.Request()
-		if r.Method == http.MethodDelete {
-			id, err := strconv.Atoi(c.Param("id"))
-			if err != nil {
-				return err
-			}
-			err = h.AdminService.DeletePost(uint(id))
-			if err != nil {
-				return c.JSON(http.StatusNotFound, err)
-			}
+		categories, err := h.AdminService.AdminGetAllCategories()
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve categories"})
 		}
-		return c.JSON(http.StatusMethodNotAllowed, r.Method)
+		return c.JSON(http.StatusOK, categories)
 	}
 }
 
-func (h *AdminHandler) AdminGetListOfCategories() echo.HandlerFunc {
+func (h *AdminHandler) CreateCategory() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		r := c.Request()
-		if r.Method == http.MethodGet {
-			categories, err := h.AdminService.AdminGetAllCategories()
-			if err != nil {
-				return c.JSON(http.StatusNotFound, err)
-			}
-			return c.JSON(http.StatusOK, categories)
+		newCategory := types.Category{
+			Name: c.FormValue("name"),
 		}
-		return c.JSON(http.StatusMethodNotAllowed, r.Method)
+		err := h.AdminService.CreateCategory(newCategory)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to create category"})
+		}
+		return c.JSON(http.StatusCreated, newCategory.Name)
 	}
 }
 
-func (h *AdminHandler) AdminCreateCategory() echo.HandlerFunc {
+func (h *AdminHandler) DeleteCategory() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		r := c.Request()
-		if r.Method == http.MethodPost {
-			newCategory := types.Category{
-				Name: c.FormValue("name"),
-			}
-			err := h.AdminService.CreateCategory(newCategory)
-			if err != nil {
-				return c.JSON(http.StatusNotFound, err)
-			}
-			return c.JSON(http.StatusCreated, newCategory.Name)
+		id := utils.GetInt(c.Param("id"))
+		err := h.AdminService.DeleteCategory(id)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to delete category"})
 		}
-		return c.JSON(http.StatusMethodNotAllowed, r.Method)
-	}
-}
-
-func (h *AdminHandler) AdminDeleteCategory() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		r := c.Request()
-		if r.Method == http.MethodDelete {
-			id, err := strconv.Atoi(c.Param("id"))
-			if err != nil {
-				return err
-			}
-			err = h.AdminService.DeleteCategory(uint(id))
-			if err != nil {
-				return c.JSON(http.StatusNotFound, err)
-			}
-		}
-		return c.JSON(http.StatusMethodNotAllowed, r.Method)
+		return c.JSON(http.StatusOK, map[string]string{"message": "Category deleted successfully"})
 	}
 }

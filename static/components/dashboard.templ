@@ -1,5 +1,34 @@
 package components 
 
+templ DeletePostIcon() {
+}
+
+templ EditPostIcon() {
+}
+
+templ FilterByCategoryDropdown() {
+	<button class="filter-by-category-button">
+		Filter	
+	</button>
+	<select class="filter-by-category-dropdown"></select>
+}
+
+templ AddPosts() {
+	<button class="add-post">
+		Add Post +
+	</button>
+}
+
+templ PostsTableHeader() {
+	<div class="posts-header">
+		<h2>Uploaded Posts</h2>
+	</div>
+}
+
+templ PostsTable() {
+	<div class="posts"></div>
+}
+
 templ AdminDashboard() {
 	<!DOCTYPE html>
 	<html>
@@ -17,6 +46,6 @@ templ AdminDashboard() {
                 }
             </style>
 		</head>
-		<body></body>
+		<body>Welcome to Admin Dashboard</body>
 	</html>
 }

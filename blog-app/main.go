@@ -12,6 +12,7 @@ import (
 
 	"github.com/blaze-d83/blog-app/blog-app/cmd"
 	"github.com/blaze-d83/blog-app/internal/db"
+	"github.com/blaze-d83/blog-app/internal/handlers"
 	"github.com/blaze-d83/blog-app/internal/routes"
 	service "github.com/blaze-d83/blog-app/internal/services/logger"
 	"github.com/labstack/echo/v4"
@@ -47,7 +48,9 @@ func main() {
 	e.Use(middleware.LoggerWithConfig(*customLoggerConfig))
 	e.Use(middleware.Recover())
 
-	routes.RegisterRoutes(e, dbInstance)
+	login := handlers.NewLoginHandler(dbInstance)
+
+	routes.RegisterRoutes(e, login )
 
 	go func ()  {
 		if err := e.Start(":1323"); err != nil && err != http.ErrServerClosed {

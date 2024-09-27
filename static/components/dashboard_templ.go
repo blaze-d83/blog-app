@@ -26,7 +26,7 @@ func AdminDashboard() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Admin Dashboard</title><script src=\"https://unpkg.com/htmx.org\"></script><style>\r\n            body {\r\n                    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\r\n                    background-color: #f9f9f9;\r\n                    height: 100vh;\r\n                    margin: 0;\r\n                }\r\n            </style></head><body></body></html>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Admin Dashboard</title><script src=\"https://unpkg.com/htmx.org\"></script><style>\r\n            body {\r\n                    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\r\n                    background-color: #f9f9f9;\r\n                    height: 100vh;\r\n                    margin: 0;\r\n                }\r\n            </style></head><body>Welcome to Admin Dashboard</body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

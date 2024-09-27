@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -16,10 +15,17 @@ import (
 	"gorm.io/gorm"
 )
 
+type LoginRepository struct {
+	db *db.Database
+}
+
+func NewLoginHandler(db *db.Database) *LoginRepository {
+	return &LoginRepository{db: db}
+}
+
 func RenderLoginPage(c echo.Context, errMsg string) error {
 	w := c.Response().Writer
 	if errMsg != "" {
-		w.Write([]byte(fmt.Sprintf(`<p class="error-message">%s</p>`, errMsg)))
 		return nil
 	}
 	loginPage := components.LoginPage(errMsg)
@@ -31,26 +37,28 @@ func RenderLoginPage(c echo.Context, errMsg string) error {
 	return nil
 }
 
-func GetLoginPageHandler() echo.HandlerFunc {
+func (repo *LoginRepository) GetLoginPageHandler() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		return RenderLoginPage(c, "")
 	}
 }
 
-func ProcessAdminLoginHandler(dbInstance *db.Database) echo.HandlerFunc {
+func (repo *LoginRepository) ProcessAdminLoginHandler() echo.HandlerFunc {
 	return func(c echo.Context) error {
 
 		username := c.FormValue("username")
 		password := c.FormValue("password")
 
 		if username == "" || password == "" {
+			c.Response().WriteHeader(http.StatusBadRequest)
 			return RenderLoginPage(c, "Missing username or password")
 		}
 
 		var admin types.Admin
 
-		if err := dbInstance.DB.Where("username = ?", username).First(&admin).Error; err != nil {
+		if err := repo.db.DB.Where("username = ?", username).First(&admin).Error; err != nil {
 			if err == gorm.ErrRecordNotFound {
+				c.Response().WriteHeader(http.StatusBadRequest)
 				return RenderLoginPage(c, "Invalid username or password")
 			}
 			log.Println("Database error: ", err)
@@ -59,18 +67,20 @@ func ProcessAdminLoginHandler(dbInstance *db.Database) echo.HandlerFunc {
 		}
 
 		if err := bcrypt.CompareHashAndPassword([]byte(admin.Pass), []byte(password)); err != nil {
+			c.Response().WriteHeader(http.StatusBadRequest)
 			return RenderLoginPage(c, "Invalid username or password")
 		}
 
 		sess, err := session.Get("session", c)
 		if err != nil {
 			log.Println("Session error: ", err)
+			c.Response().WriteHeader(http.StatusBadRequest)
 			http.Error(c.Response().Writer, "Internal server error", http.StatusInternalServerError)
 			return err
 		}
 		sess.Options = &sessions.Options{
-			Path: "/",
-			MaxAge: 86400 * 7,
+			Path:     "/",
+			MaxAge:   86400 * 7,
 			HttpOnly: true,
 		}
 		sess.Values["admin_id"] = admin.ID
@@ -78,6 +88,6 @@ func ProcessAdminLoginHandler(dbInstance *db.Database) echo.HandlerFunc {
 			log.Println("Failed to save session: ", err)
 			return c.String(http.StatusInternalServerError, "Failed to save session")
 		}
-		return c.Redirect(http.StatusSeeOther, "/admin/dashboard")
+		return nil
 	}
 }

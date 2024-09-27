@@ -22,10 +22,8 @@ type AdminService interface {
 	DeleteCategory(id uint) error
 }
 
-func NewAdminRepository(db *db.Database) *AdminRepository {
-	return &AdminRepository{
-		db: db,
-	}
+func NewAdminService(db *db.Database) *AdminRepository {
+	return &AdminRepository{db: db}
 }
 
 func (repo *AdminRepository) GetAllPostsForAdmin() ([]types.AdminPostListView, error) {
