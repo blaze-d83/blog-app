@@ -76,11 +76,13 @@ templ LoginForm(errMsg string) {
 			@FormInput("Password", "password", "password")
 			@SubmitButton("Login")
 		</form>
-		<div class={ "error-message", ErrorMsgStyle() } id="error-message">{ errMsg }</div>
+		<div class={ "error-message", ErrorMsgStyle() } id="error-message">
+			{ errMsg }
+		</div>
 	</div>
 }
 
-templ LoginPage(errorMsg string) {
+templ LoginPage() {
 	<!DOCTYPE html>
 	<html lang="en">
 		<head>
@@ -101,7 +103,7 @@ templ LoginPage(errorMsg string) {
             </style>
 		</head>
 		<body>
-			@LoginForm(errorMsg)
+			@LoginForm("")
 		</body>
 	</html>
 }

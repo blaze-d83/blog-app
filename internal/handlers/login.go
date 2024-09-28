@@ -8,10 +8,10 @@ import (
 	"github.com/blaze-d83/blog-app/internal/db"
 	"github.com/blaze-d83/blog-app/static/components"
 	"github.com/blaze-d83/blog-app/types"
+	"github.com/blaze-d83/blog-app/utils"
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
-	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -24,11 +24,18 @@ func NewLoginHandler(db *db.Database) *LoginRepository {
 }
 
 func RenderLoginPage(c echo.Context, errMsg string) error {
-	w := c.Response().Writer
-	if errMsg != "" {
+	if c.Request().Header.Get("HX-Request") == "true"{
+		w := c.Response().Writer
+		loginForm := components.LoginForm(errMsg)
+		err := loginForm.Render(context.Background(), w)
+		if err != nil {
+			http.Error(w, "Failed to render login form", http.StatusInternalServerError)
+			return err
+		}
 		return nil
 	}
-	loginPage := components.LoginPage(errMsg)
+	w := c.Response().Writer
+	loginPage := components.LoginPage()
 	err := loginPage.Render(context.Background(), w)
 	if err != nil {
 		http.Error(w, "Failed to render login page", http.StatusInternalServerError)
@@ -66,7 +73,7 @@ func (repo *LoginRepository) ProcessAdminLoginHandler() echo.HandlerFunc {
 			return err
 		}
 
-		if err := bcrypt.CompareHashAndPassword([]byte(admin.Pass), []byte(password)); err != nil {
+		if err := utils.CompareHashPassword(&admin, password); err != nil {
 			c.Response().WriteHeader(http.StatusBadRequest)
 			return RenderLoginPage(c, "Invalid username or password")
 		}
@@ -88,6 +95,6 @@ func (repo *LoginRepository) ProcessAdminLoginHandler() echo.HandlerFunc {
 			log.Println("Failed to save session: ", err)
 			return c.String(http.StatusInternalServerError, "Failed to save session")
 		}
-		return nil
+		return c.NoContent(http.StatusOK) 
 	}
 }

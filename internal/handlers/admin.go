@@ -11,7 +11,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type AdminHandler struct {
+type AdminServiceHandler struct {
 	services.AdminService
 }
 
@@ -25,9 +25,9 @@ func RenderAdminDashboard(c echo.Context) error {
 	return nil
 }
 
-func (h *AdminHandler) GetListOfPosts() echo.HandlerFunc {
+func (s *AdminServiceHandler) GetListOfPosts() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		posts, err := h.AdminService.GetAllPostsForAdmin()
+		posts, err := s.AdminService.GetAllPostsForAdmin()
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve posts"})
 		}
@@ -35,10 +35,10 @@ func (h *AdminHandler) GetListOfPosts() echo.HandlerFunc {
 	}
 }
 
-func (h *AdminHandler) GetPostToPreview() echo.HandlerFunc {
+func (s *AdminServiceHandler) GetPostToPreview() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := utils.GetInt(c.Param("id"))
-		post, err := h.AdminService.GetPostByID(id)
+		post, err := s.AdminService.GetPostByID(id)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve post to preview"})
 		}
@@ -46,7 +46,7 @@ func (h *AdminHandler) GetPostToPreview() echo.HandlerFunc {
 	}
 }
 
-func (h *AdminHandler) CreatePost() echo.HandlerFunc {
+func (s *AdminServiceHandler) CreatePost() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		post := types.Post{
 			Title:       c.FormValue("title"),
@@ -56,7 +56,7 @@ func (h *AdminHandler) CreatePost() echo.HandlerFunc {
 			PhotoIcon:   c.FormValue("photo-link"),
 			BannerImage: c.FormValue("banner-link"),
 		}
-		err := h.AdminService.CreatePost(post)
+		err := s.AdminService.CreatePost(post)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to create post"})
 		}
@@ -64,7 +64,7 @@ func (h *AdminHandler) CreatePost() echo.HandlerFunc {
 	}
 }
 
-func (h *AdminHandler) UpdatePost() echo.HandlerFunc {
+func (s *AdminServiceHandler) UpdatePost() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := utils.GetInt(c.Param("id"))
 		post := types.Post{
@@ -76,7 +76,7 @@ func (h *AdminHandler) UpdatePost() echo.HandlerFunc {
 			BannerImage: c.FormValue("banner-link"),
 		}
 
-		err := h.AdminService.UpdatePost(id, post)
+		err := s.AdminService.UpdatePost(id, post)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve post to update"})
 		}
@@ -84,10 +84,10 @@ func (h *AdminHandler) UpdatePost() echo.HandlerFunc {
 	}
 }
 
-func (h *AdminHandler) DeletePost() echo.HandlerFunc {
+func (s *AdminServiceHandler) DeletePost() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := utils.GetInt(c.Param("id"))
-		err := h.AdminService.DeletePost(id)
+		err := s.AdminService.DeletePost(id)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve post to delete"})
 		}
@@ -95,9 +95,9 @@ func (h *AdminHandler) DeletePost() echo.HandlerFunc {
 	}
 }
 
-func (h *AdminHandler) GetListOfCategories() echo.HandlerFunc {
+func (s *AdminServiceHandler) GetListOfCategories() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		categories, err := h.AdminService.AdminGetAllCategories()
+		categories, err := s.AdminService.AdminGetAllCategories()
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve categories"})
 		}
@@ -105,12 +105,12 @@ func (h *AdminHandler) GetListOfCategories() echo.HandlerFunc {
 	}
 }
 
-func (h *AdminHandler) CreateCategory() echo.HandlerFunc {
+func (s *AdminServiceHandler) CreateCategory() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		newCategory := types.Category{
 			Name: c.FormValue("name"),
 		}
-		err := h.AdminService.CreateCategory(newCategory)
+		err := s.AdminService.CreateCategory(newCategory)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to create category"})
 		}
@@ -118,10 +118,10 @@ func (h *AdminHandler) CreateCategory() echo.HandlerFunc {
 	}
 }
 
-func (h *AdminHandler) DeleteCategory() echo.HandlerFunc {
+func (s *AdminServiceHandler) DeleteCategory() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := utils.GetInt(c.Param("id"))
-		err := h.AdminService.DeleteCategory(id)
+		err := s.AdminService.DeleteCategory(id)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to delete category"})
 		}
