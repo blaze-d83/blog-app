@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/blaze-d83/blog-app/internal/services"
@@ -15,12 +14,23 @@ type AdminServiceHandler struct {
 	services.AdminService
 }
 
+
 func RenderAdminDashboard(c echo.Context) error {
 	w := c.Response().Writer
 	adminPage := components.AdminDashboard()
-	err := adminPage.Render(context.Background(), w)
+	err := adminPage.Render(c.Request().Context(), w)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to render admin dashboard"})
+	}
+	return nil
+}
+
+func RenderEditor(c echo.Context) error  {
+	w := c.Response().Writer
+	editor := components.Editor()
+	err := editor.Render(c.Request().Context(), w)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to render editor"})
 	}
 	return nil
 }

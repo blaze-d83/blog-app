@@ -28,6 +28,7 @@ func RegisterRoutes(e *echo.Echo,
 
 	// Admin post routes
 	admin.GET("/dashboard", handlers.RenderAdminDashboard)
+	admin.GET("/editor", handlers.RenderEditor)
 //	admin.GET("/posts", adminHandler.GetListOfPosts())
 //	admin.GET("/posts/:id", adminHandler.GetPostToPreview())
 //	admin.POST("/posts", adminHandler.CreatePost())
