@@ -17,18 +17,15 @@ func RegisterRoutes(e *echo.Echo,
 	e.Use(session.Middleware(store))
 
 	// Public routes
-	e.GET("/", handlers.Homepage)
 //	e.GET("/posts", publicHandler.GetListOfAllPostsHandler())
 //	e.GET("/posts/:id", publicHandler.ViewFullPostHandler())
 
 	// Login routes
-	admin := e.Group("/admin")
-	admin.GET("/login", loginHandler.GetLoginPageHandler())
-	admin.POST("/login", loginHandler.ProcessAdminLoginHandler())
+	// admin := e.Group("/admin")
+	// admin.GET("/login", loginHandler.GetLoginPageHandler())
+	// admin.POST("/login", loginHandler.ProcessAdminLoginHandler())
 
 	// Admin post routes
-	admin.GET("/dashboard", handlers.RenderAdminDashboard)
-	admin.GET("/editor", handlers.RenderEditor)
 //	admin.GET("/posts", adminHandler.GetListOfPosts())
 //	admin.GET("/posts/:id", adminHandler.GetPostToPreview())
 //	admin.POST("/posts", adminHandler.CreatePost())
