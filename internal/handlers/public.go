@@ -3,15 +3,14 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/blaze-d83/blog-app/internal/services"
-	"github.com/blaze-d83/blog-app/utils"
+	"github.com/blaze-d83/blog-app/pkg/services"
+	"github.com/blaze-d83/blog-app/pkg/utils"
 	"github.com/labstack/echo/v4"
 )
 
 type PublicHandler struct {
 	public services.PublicService
 }
-
 
 func (h *PublicHandler) GetListOfAllPostsHandler() echo.HandlerFunc {
 	return func(c echo.Context) error {

@@ -1,6 +1,6 @@
 # Variables
 BINARY_NAME=blog
-SRC_DIR=blog-app
+SRC_DIR=cmd
 MAIN=$(SRC_DIR)/main.go
 BIN_DIR=bin
 ENV_FILE=.env

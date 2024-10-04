@@ -10,11 +10,9 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/blaze-d83/blog-app/blog-app/cmd"
-	"github.com/blaze-d83/blog-app/internal/db"
-	"github.com/blaze-d83/blog-app/internal/handlers"
-	"github.com/blaze-d83/blog-app/internal/routes"
-	service "github.com/blaze-d83/blog-app/internal/services/logger"
+	"github.com/blaze-d83/blog-app/pkg/logger"
+	"github.com/blaze-d83/blog-app/pkg/mysql"
+	"github.com/blaze-d83/blog-app/pkg/services"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -22,12 +20,12 @@ import (
 func main() {
 
 	if len(os.Args) > 2 && strings.ToLower(os.Args[1]) == "create" && strings.ToLower(os.Args[2]) == "superuser" {
-		cmd.InitCmd()
-		cmd.Execute()
+		services.InitCmd()
+		services.Execute()
 		return
 	}
 
-	dbInstance := db.InitDB()
+	dbInstance := mysql.InitDB()
 	defer func()  {
 		sqlDB, err := dbInstance.DB.DB()
 		if err != nil {
@@ -43,14 +41,11 @@ func main() {
 
 	e := echo.New()
 
-	customLoggerConfig := service.GetCustomLoggerConfig(e)
+	customLoggerConfig := logger.GetCustomLoggerConfig(e)
 
 	e.Use(middleware.LoggerWithConfig(*customLoggerConfig))
 	e.Use(middleware.Recover())
 
-	login := handlers.NewLoginHandler(dbInstance)
-
-	routes.RegisterRoutes(e, login )
 
 	go func ()  {
 		if err := e.Start(":1323"); err != nil && err != http.ErrServerClosed {

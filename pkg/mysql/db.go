@@ -1,11 +1,11 @@
-package db
+package mysql
 
 import (
 	"fmt"
 	"log"
 
-	"github.com/blaze-d83/blog-app/internal/config"
-	"github.com/blaze-d83/blog-app/types"
+	"github.com/blaze-d83/blog-app/env"
+	"github.com/blaze-d83/blog-app/pkg/types"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -39,7 +39,7 @@ func NewMySQLStorage(dsn string) (*Database, error) {
 }
 
 func GetDSN() string {
-	dbConfig := config.LoadConfig()
+	dbConfig := env.LoadConfig()
 	dsn := fmt.Sprintf("%s:%s@%s(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		dbConfig.DBConfig.User,
 		dbConfig.DBConfig.Pass,

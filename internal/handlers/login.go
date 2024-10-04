@@ -1,24 +1,23 @@
 package handlers
 
- import (
+import "github.com/blaze-d83/blog-app/pkg/mysql"
+
 // 	"context"
 // 	"log"
 // 	"net/http"
 //
- 	"github.com/blaze-d83/blog-app/internal/db"
- 	// "github.com/blaze-d83/blog-app/types"
+// "github.com/blaze-d83/blog-app/types"
 // 	"github.com/blaze-d83/blog-app/utils"
 // 	"github.com/gorilla/sessions"
 // 	"github.com/labstack/echo-contrib/session"
 // 	"github.com/labstack/echo/v4"
 // 	"gorm.io/gorm"
- )
 
 type LoginRepository struct {
-	db *db.Database
+	db *mysql.Database
 }
 
-func NewLoginHandler(db *db.Database) *LoginRepository {
+func NewLoginHandler(db *mysql.Database) *LoginRepository {
 	return &LoginRepository{db: db}
 }
 
@@ -94,6 +93,6 @@ func NewLoginHandler(db *db.Database) *LoginRepository {
 // 			log.Println("Failed to save session: ", err)
 // 			return c.String(http.StatusInternalServerError, "Failed to save session")
 // 		}
-// 		return c.NoContent(http.StatusOK) 
+// 		return c.NoContent(http.StatusOK)
 // 	}
 // }

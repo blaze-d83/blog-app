@@ -3,12 +3,12 @@ package services
 import (
 	"fmt"
 
-	"github.com/blaze-d83/blog-app/internal/db"
-	"github.com/blaze-d83/blog-app/types"
+	"github.com/blaze-d83/blog-app/pkg/mysql"
+	"github.com/blaze-d83/blog-app/pkg/types"
 )
 
 type AdminRepository struct {
-	db *db.Database
+	db *mysql.Database
 }
 
 type AdminService interface {
@@ -22,7 +22,7 @@ type AdminService interface {
 	DeleteCategory(id uint) error
 }
 
-func NewAdminService(db *db.Database) *AdminRepository {
+func NewAdminService(db *mysql.Database) *AdminRepository {
 	return &AdminRepository{db: db}
 }
 

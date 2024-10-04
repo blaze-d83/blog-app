@@ -4,7 +4,7 @@ import (
 	"log"
 	"strconv"
 
-	"github.com/blaze-d83/blog-app/types"
+	"github.com/blaze-d83/blog-app/pkg/types"
 	"golang.org/x/crypto/bcrypt"
 )
 

@@ -1,4 +1,5 @@
-package config
+
+package env
 
 import (
 	"log"

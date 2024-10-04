@@ -3,16 +3,15 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/blaze-d83/blog-app/internal/services"
-	"github.com/blaze-d83/blog-app/types"
-	"github.com/blaze-d83/blog-app/utils"
+	"github.com/blaze-d83/blog-app/pkg/services"
+	"github.com/blaze-d83/blog-app/pkg/types"
+	"github.com/blaze-d83/blog-app/pkg/utils"
 	"github.com/labstack/echo/v4"
 )
 
 type AdminServiceHandler struct {
 	services.AdminService
 }
-
 
 func (s *AdminServiceHandler) GetListOfPosts() echo.HandlerFunc {
 	return func(c echo.Context) error {

@@ -3,8 +3,8 @@ package services
 import (
 	"fmt"
 
-	"github.com/blaze-d83/blog-app/internal/db"
-	"github.com/blaze-d83/blog-app/types"
+	"github.com/blaze-d83/blog-app/pkg/mysql"
+	"github.com/blaze-d83/blog-app/pkg/types"
 )
 
 type PublicService interface {
@@ -13,7 +13,7 @@ type PublicService interface {
 }
 
 type UserRepository struct {
-	*db.Database
+	*mysql.Database
 }
 
 func (repo *UserRepository) UsersGetAllPosts() ([]types.UserPostListView, error) {
