@@ -2,13 +2,6 @@ package types
 
 import "time"
 
-type Admin struct {
-	ID       uint   `gorm:"primaryKey;autoIncrement"`
-	Username string `gorm:"unique;not null"`
-	Email    string `gorm:"unique;not null"`
-	Pass     string `gorm:"not null"`
-}
-
 type Post struct {
 	ID          uint       `gorm:"primaryKey;autoIncrement"`
 	Title       string     `gorm:"not null"`
@@ -31,19 +24,6 @@ type Source struct {
 	Text   string `gorm:"not null"`
 	URL    string `gorm:"type:text"`
 	Order  uint   `gorm:"not null"`
-}
-
-type AdminPostListView struct {
-	Title     string    `json:"title"`
-	Date      time.Time `json:"date"`
-	CreatedAt time.Time `json:"created_at"`
-}
-
-type UserPostListView struct {
-	Title    string    `json:"title"`
-	Date     time.Time `json:"date"`
-	Citation string    `json:"citation"`
-	Summary  string    `json:"summary"`
 }
 
 type Category struct {

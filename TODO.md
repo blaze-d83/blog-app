@@ -3,7 +3,7 @@
 ## Next Steps (Backend)
 - [x] Rewrite types/models.go
 - [x] Create a single DB instance for gorm.db
-- [ ] Complete Post and Category CRUD services
+- [x] Complete Post and Category CRUD services
   - [x] Get all posts
   - [x] Get post by ID
   - [x] Create post

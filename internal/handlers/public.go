@@ -9,12 +9,18 @@ import (
 )
 
 type PublicHandler struct {
-	public services.PublicService
+	service services.PublicService
+}
+
+func (h *PublicHandler) NewUserHandler(service services.PublicService) *PublicHandler {
+	return &PublicHandler{
+		service: service,
+	}
 }
 
 func (h *PublicHandler) GetListOfAllPostsHandler() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		posts, err := h.public.UsersGetAllPosts()
+		posts, err := h.service.GetAllPosts()
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve posts"})
 		}
@@ -24,8 +30,11 @@ func (h *PublicHandler) GetListOfAllPostsHandler() echo.HandlerFunc {
 
 func (h *PublicHandler) ViewFullPostHandler() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		id := utils.GetInt(c.Param("id"))
-		post, err := h.public.UsersGetPostsByID(uint(id))
+		id, err := utils.GetInt(c.Param("id"))
+		if err != nil {
+			return err
+		}
+		post, err := h.service.GetPostsByID(uint(id))
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve posts"})
 		}

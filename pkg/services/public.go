@@ -8,17 +8,23 @@ import (
 )
 
 type PublicService interface {
-	UsersGetAllPosts() ([]types.UserPostListView, error)
-	UsersGetPostsByID(id uint) (types.Post, error)
+	GetAllPosts() ([]types.UserPostListView, error)
+	GetPostsByID(id uint) (types.Post, error)
 }
 
 type UserRepository struct {
-	*mysql.Database
+	db *mysql.Database
 }
 
-func (repo *UserRepository) UsersGetAllPosts() ([]types.UserPostListView, error) {
+func (r *UserRepository) NewUserService(db *mysql.Database) *UserRepository {
+	return &UserRepository{
+		db: db,
+	}
+}
+
+func (repo *UserRepository) GetAllPosts() ([]types.UserPostListView, error) {
 	var userPosts []types.UserPostListView
-	result := repo.DB.Model(types.Post{}).
+	result := repo.db.DB.Model(types.Post{}).
 		Select("title", "date", "citation", "summary").
 		Scan(userPosts)
 	if result.Error != nil {
@@ -27,9 +33,9 @@ func (repo *UserRepository) UsersGetAllPosts() ([]types.UserPostListView, error)
 	return userPosts, nil
 }
 
-func (repo *UserRepository) UsersGetPostByID(id uint) (types.Post, error) {
+func (repo *UserRepository) GetPostByID(id uint) (types.Post, error) {
 	var post types.Post
-	result := repo.DB.First(&post, id)
+	result := repo.db.DB.First(&post, id)
 	if result.Error != nil {
 		if result.RowsAffected == 0 {
 			return types.Post{}, fmt.Errorf("post with ID %d not found", id)

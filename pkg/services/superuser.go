@@ -5,9 +5,9 @@ import (
 	"log"
 	"os"
 
+	"github.com/blaze-d83/blog-app/pkg/auth"
 	"github.com/blaze-d83/blog-app/pkg/mysql"
 	"github.com/blaze-d83/blog-app/pkg/types"
-	"github.com/blaze-d83/blog-app/pkg/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -58,7 +58,7 @@ var superuserCmd = &cobra.Command{
 			}
 		}()
 
-		hashedPassword := utils.HashPassword(password)
+		hashedPassword := auth.HashPassword(password)
 
 		user := types.Admin{
 			Username: username,

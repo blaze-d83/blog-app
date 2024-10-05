@@ -1,29 +1,15 @@
 package utils
 
 import (
-	"log"
+	"fmt"
 	"strconv"
-
-	"github.com/blaze-d83/blog-app/pkg/types"
-	"golang.org/x/crypto/bcrypt"
 )
 
-func HashPassword(p string) []byte {
-	hashPass, err := bcrypt.GenerateFromPassword([]byte(p), bcrypt.DefaultCost)
+
+func GetInt(param string) (uint, error) {
+	id, err := strconv.Atoi(param)
 	if err != nil {
-		log.Fatalf("failed to hash password: %v", err)
+		return 0, fmt.Errorf("invalid integer value: %v", err)
 	}
-	return hashPass
-}
-
-func CompareHashPassword(admin *types.Admin, pass string) error {
-	if err := bcrypt.CompareHashAndPassword([]byte(admin.Pass), []byte(pass)); err != nil {
-		return err
-	}
-	return nil
-}
-
-func GetInt(param string) uint {
-	id, _ := strconv.Atoi(param)
-	return (uint(id))
+	return (uint(id)), nil
 }

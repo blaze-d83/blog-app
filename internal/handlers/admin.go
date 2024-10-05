@@ -3,19 +3,77 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/blaze-d83/blog-app/pkg/auth"
 	"github.com/blaze-d83/blog-app/pkg/services"
 	"github.com/blaze-d83/blog-app/pkg/types"
 	"github.com/blaze-d83/blog-app/pkg/utils"
 	"github.com/labstack/echo/v4"
 )
 
-type AdminServiceHandler struct {
-	services.AdminService
+type AdminHandler struct {
+	service services.AdminService
 }
 
-func (s *AdminServiceHandler) GetListOfPosts() echo.HandlerFunc {
+func (h *AdminHandler) NewAdminHandler(service services.AdminService) *AdminHandler {
+	return &AdminHandler{
+		service: service,
+	}
+}
+
+func (h *AdminHandler) GetAdminLoginPage() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		posts, err := s.AdminService.GetAllPostsForAdmin()
+		return nil
+	}
+}
+
+func (h *AdminHandler) ProcessHandler() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		username := c.FormValue("username")
+		password := c.FormValue("password")
+
+		admin, err := h.service.CheckAdminExists(username)
+		if err != nil {
+			return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid credentials"})
+		}
+
+		err = auth.CompareHashPassword(admin, password)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Invalid credentials"})
+		}
+
+		token, err := auth.GenerateJWT(username)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Could not generate token"})
+		}
+
+		return c.JSON(http.StatusOK, map[string]string{
+			"token": token,
+		})
+	}
+}
+
+func (h *AdminHandler) AdminJWTMiddleware() echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			token := c.Request().Header.Get("Authorization")
+			if token == "" {
+				return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Missing or invalid token"})
+			}
+			claims, err := auth.ValidateJWT(token)
+			if err != nil {
+				return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid or expired token"})
+			}
+			c.Set("username", claims.Username)
+
+			return next(c)
+		}
+	}
+
+}
+
+func (h *AdminHandler) GetListOfPosts() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		posts, err := h.service.GetAllPostsForAdmin()
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve posts"})
 		}
@@ -23,10 +81,13 @@ func (s *AdminServiceHandler) GetListOfPosts() echo.HandlerFunc {
 	}
 }
 
-func (s *AdminServiceHandler) GetPostToPreview() echo.HandlerFunc {
+func (h *AdminHandler) GetPostToPreview() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		id := utils.GetInt(c.Param("id"))
-		post, err := s.AdminService.GetPostByID(id)
+		id, err := utils.GetInt(c.Param("id"))
+		if err != nil {
+			return err
+		}
+		post, err := h.service.GetPostByID(id)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve post to preview"})
 		}
@@ -34,17 +95,10 @@ func (s *AdminServiceHandler) GetPostToPreview() echo.HandlerFunc {
 	}
 }
 
-func (s *AdminServiceHandler) CreatePost() echo.HandlerFunc {
+func (h *AdminHandler) CreatePost() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		post := types.Post{
-			Title:       c.FormValue("title"),
-			Citation:    c.FormValue("citation"),
-			Summary:     c.FormValue("summary"),
-			Content:     c.FormValue("content"),
-			PhotoIcon:   c.FormValue("photo-link"),
-			BannerImage: c.FormValue("banner-link"),
-		}
-		err := s.AdminService.CreatePost(post)
+		post := parsePostFromRequest(c)
+		err := h.service.CreatePost(post)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to create post"})
 		}
@@ -52,19 +106,14 @@ func (s *AdminServiceHandler) CreatePost() echo.HandlerFunc {
 	}
 }
 
-func (s *AdminServiceHandler) UpdatePost() echo.HandlerFunc {
+func (h *AdminHandler) UpdatePost() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		id := utils.GetInt(c.Param("id"))
-		post := types.Post{
-			Title:       c.FormValue("title"),
-			Citation:    c.FormValue("citation"),
-			Summary:     c.FormValue("summary"),
-			Content:     c.FormValue("content"),
-			PhotoIcon:   c.FormValue("photo-link"),
-			BannerImage: c.FormValue("banner-link"),
+		id, err := utils.GetInt(c.Param("id"))
+		if err != nil {
+			return err
 		}
-
-		err := s.AdminService.UpdatePost(id, post)
+		post := parsePostFromRequest(c)
+		err = h.service.UpdatePost(id, post)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve post to update"})
 		}
@@ -72,10 +121,13 @@ func (s *AdminServiceHandler) UpdatePost() echo.HandlerFunc {
 	}
 }
 
-func (s *AdminServiceHandler) DeletePost() echo.HandlerFunc {
+func (h *AdminHandler) DeletePost() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		id := utils.GetInt(c.Param("id"))
-		err := s.AdminService.DeletePost(id)
+		id, err := utils.GetInt(c.Param("id"))
+		if err != nil {
+			return err
+		}
+		err = h.service.DeletePost(id)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve post to delete"})
 		}
@@ -83,9 +135,9 @@ func (s *AdminServiceHandler) DeletePost() echo.HandlerFunc {
 	}
 }
 
-func (s *AdminServiceHandler) GetListOfCategories() echo.HandlerFunc {
+func (h *AdminHandler) GetListOfCategories() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		categories, err := s.AdminService.AdminGetAllCategories()
+		categories, err := h.service.AdminGetAllCategories()
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve categories"})
 		}
@@ -93,12 +145,12 @@ func (s *AdminServiceHandler) GetListOfCategories() echo.HandlerFunc {
 	}
 }
 
-func (s *AdminServiceHandler) CreateCategory() echo.HandlerFunc {
+func (h *AdminHandler) CreateCategory() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		newCategory := types.Category{
 			Name: c.FormValue("name"),
 		}
-		err := s.AdminService.CreateCategory(newCategory)
+		err := h.service.CreateCategory(newCategory)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to create category"})
 		}
@@ -106,13 +158,26 @@ func (s *AdminServiceHandler) CreateCategory() echo.HandlerFunc {
 	}
 }
 
-func (s *AdminServiceHandler) DeleteCategory() echo.HandlerFunc {
+func (h *AdminHandler) DeleteCategory() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		id := utils.GetInt(c.Param("id"))
-		err := s.AdminService.DeleteCategory(id)
+		id, err := utils.GetInt(c.Param("id"))
+		if err != nil {
+			return err
+		}
+		err = h.service.DeleteCategory(id)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to delete category"})
 		}
 		return c.JSON(http.StatusOK, map[string]string{"message": "Category deleted successfully"})
+	}
+}
+
+func parsePostFromRequest(c echo.Context) types.Post {
+	return types.Post{
+		Title:       c.FormValue("title"),
+		Citation:    c.FormValue("citation"),
+		Summary:     c.FormValue("summary"),
+		PhotoIcon:   c.FormValue("photo-icon"),
+		BannerImage: c.FormValue("banner-image"),
 	}
 }

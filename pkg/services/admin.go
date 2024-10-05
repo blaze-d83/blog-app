@@ -5,6 +5,7 @@ import (
 
 	"github.com/blaze-d83/blog-app/pkg/mysql"
 	"github.com/blaze-d83/blog-app/pkg/types"
+	"gorm.io/gorm"
 )
 
 type AdminRepository struct {
@@ -12,6 +13,7 @@ type AdminRepository struct {
 }
 
 type AdminService interface {
+	CheckAdminExists(username string) (*types.Admin, error)
 	GetAllPostsForAdmin() ([]types.AdminPostListView, error)
 	GetPostByID(id uint) (types.Post, error)
 	CreatePost(post types.Post) error
@@ -24,6 +26,18 @@ type AdminService interface {
 
 func NewAdminService(db *mysql.Database) *AdminRepository {
 	return &AdminRepository{db: db}
+}
+
+func (repo *AdminRepository) CheckAdminExists(username string) (*types.Admin, error) {
+	var admin types.Admin
+	err := repo.db.DB.Where("username = ?", username).Find(&admin).Error
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, fmt.Errorf("admin with username %s not found", username)
+		}
+		return nil, err
+	}
+	return &admin, nil
 }
 
 func (repo *AdminRepository) GetAllPostsForAdmin() ([]types.AdminPostListView, error) {
