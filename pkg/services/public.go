@@ -16,7 +16,7 @@ type UserRepository struct {
 	db *mysql.Database
 }
 
-func (r *UserRepository) NewUserService(db *mysql.Database) *UserRepository {
+func  NewUserService(db *mysql.Database) *UserRepository {
 	return &UserRepository{
 		db: db,
 	}

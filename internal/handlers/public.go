@@ -12,12 +12,6 @@ type PublicHandler struct {
 	service services.PublicService
 }
 
-func (h *PublicHandler) NewUserHandler(service services.PublicService) *PublicHandler {
-	return &PublicHandler{
-		service: service,
-	}
-}
-
 func (h *PublicHandler) GetListOfAllPostsHandler() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		posts, err := h.service.GetAllPosts()

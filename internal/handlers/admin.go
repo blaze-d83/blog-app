@@ -14,12 +14,6 @@ type AdminHandler struct {
 	service services.AdminService
 }
 
-func (h *AdminHandler) NewAdminHandler(service services.AdminService) *AdminHandler {
-	return &AdminHandler{
-		service: service,
-	}
-}
-
 func (h *AdminHandler) GetAdminLoginPage() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		return nil

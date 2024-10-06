@@ -1,40 +1,31 @@
 package routes
 
-// import (
-//
-// 	"github.com/blaze-d83/blog-app/internal/handlers"
-// 	"github.com/gorilla/sessions"
-// 	"github.com/labstack/echo-contrib/session"
-// 	"github.com/labstack/echo/v4"
-// )
-//
-// func RegisterRoutes(e *echo.Echo,
-// //	adminHandler *handlers.AdminHandler,
-// //	publicHandler *handlers.PublicHandler,
-// 	// loginHandler *handlers.LoginRepository) {
-//
-// 	// store := sessions.NewCookieStore([]byte("secret"))
-// 	// e.Use(session.Middleware(store))
-//
-// 	// Public routes
-// //	e.GET("/posts", publicHandler.GetListOfAllPostsHandler())
-// //	e.GET("/posts/:id", publicHandler.ViewFullPostHandler())
-//
-// 	// Login routes
-// 	// admin := e.Group("/admin")
-// 	// admin.GET("/login", loginHandler.GetLoginPageHandler())
-// 	// admin.POST("/login", loginHandler.ProcessAdminLoginHandler())
-//
-// 	// Admin post routes
-// //	admin.GET("/posts", adminHandler.GetListOfPosts())
-// //	admin.GET("/posts/:id", adminHandler.GetPostToPreview())
-// //	admin.POST("/posts", adminHandler.CreatePost())
-// //	admin.PUT("/posts/:id", adminHandler.UpdatePost())
-// //	admin.DELETE("/posts/:id", adminHandler.DeletePost())
-//
-// 	// Admin categories routes
-// //	admin.GET("/categories", adminHandler.GetListOfCategories())
-// //	admin.POST("/categories", adminHandler.CreatePost())
-// //	admin.DELETE("/categories/:id", adminHandler.DeleteCategory())
-//
-// }
+import (
+	"github.com/blaze-d83/blog-app/internal/handlers"
+	"github.com/labstack/echo/v4"
+)
+
+func RegisterRoutes(e *echo.Echo, adminHandler *handlers.AdminHandler, publicHandler *handlers.PublicHandler) {
+
+	// Public Routes
+	e.GET("/", publicHandler.GetListOfAllPostsHandler())
+	e.GET("/post", publicHandler.ViewFullPostHandler())
+	
+
+	// Admin Routes
+	e.GET("/admin/login", adminHandler.GetAdminLoginPage())
+	e.POST("/admin/login", adminHandler.ProcessHandler())
+
+	// Protected Admin Routes - JWT Middleware
+	adminGroup := e.Group("/admin", adminHandler.AdminJWTMiddleware())
+	adminGroup.GET("/posts", adminHandler.GetListOfPosts())
+	adminGroup.POST("/post", adminHandler.CreatePost())
+	adminGroup.GET("/post/:id", adminHandler.GetPostToPreview())
+	adminGroup.PUT("/post/:id", adminHandler.UpdatePost())
+	adminGroup.DELETE("/post/:id", adminHandler.DeletePost())
+
+	adminGroup.GET("/categories", adminHandler.GetListOfCategories())
+	adminGroup.POST("/category", adminHandler.CreateCategory())
+	adminGroup.DELETE("/category/:id", adminHandler.DeleteCategory())
+
+}

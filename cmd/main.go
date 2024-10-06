@@ -10,12 +10,16 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/blaze-d83/blog-app/internal/handlers"
 	"github.com/blaze-d83/blog-app/pkg/logger"
 	"github.com/blaze-d83/blog-app/pkg/mysql"
 	"github.com/blaze-d83/blog-app/pkg/services"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
+
+func run()  {
+}
 
 func main() {
 
@@ -39,12 +43,22 @@ func main() {
 		}
 	}()
 
+	// Create new echo instance
 	e := echo.New()
 
+	// Setup custom logger and recovery middleware
 	customLoggerConfig := logger.GetCustomLoggerConfig(e)
-
-	e.Use(middleware.LoggerWithConfig(*customLoggerConfig))
+	e.Use(middleware.RequestLoggerWithConfig(*customLoggerConfig))
 	e.Use(middleware.Recover())
+
+	// Initialize services and handlers
+	publicService := services.NewUserService(dbInstance)
+	publicHandler := &handlers.PublicHandler{service: publicService}
+
+	adminService := services.NewAdminService(dbInstance)
+	adminHandler := &handlers.AdminHandler{service: adminService}
+
+	// Register routes
 
 
 	go func ()  {
