@@ -11,15 +11,13 @@ import (
 	"time"
 
 	"github.com/blaze-d83/blog-app/internal/handlers"
+	"github.com/blaze-d83/blog-app/internal/routes"
 	"github.com/blaze-d83/blog-app/pkg/logger"
 	"github.com/blaze-d83/blog-app/pkg/mysql"
 	"github.com/blaze-d83/blog-app/pkg/services"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
-
-func run()  {
-}
 
 func main() {
 
@@ -30,7 +28,7 @@ func main() {
 	}
 
 	dbInstance := mysql.InitDB()
-	defer func()  {
+	defer func() {
 		sqlDB, err := dbInstance.DB.DB()
 		if err != nil {
 			log.Println("Failed to obtain db connection for closing: ", err)
@@ -39,7 +37,7 @@ func main() {
 		if err := sqlDB.Close(); err != nil {
 			log.Println("Failed to close the database connection: ", err)
 		} else {
-			log.Println("Database connection closed successfullly: ", err )
+			log.Println("Database connection closed successfullly: ", err)
 		}
 	}()
 
@@ -51,18 +49,21 @@ func main() {
 	e.Use(middleware.RequestLoggerWithConfig(*customLoggerConfig))
 	e.Use(middleware.Recover())
 
-	// Initialize services and handlers
-	publicService := services.NewUserRepository(dbInstance)
+	// Initialize repositories (services)
+	publicRepo := services.NewUserRepository(dbInstance)
+	adminRepo := services.NewAdminRepository(dbInstance)
 
-	adminService := services.NewAdminRepository(dbInstance)
+	// Initialize the handlers with repositories
+	publicHandler := &handlers.PublicHandler{Repository: publicRepo}
+	adminHandler := &handlers.AdminHandler{Repository: adminRepo}
 
 	// Register routes
+	routes.RegisterRoutes(e, adminHandler, publicHandler)
 
-
-	go func ()  {
+	go func() {
 		if err := e.Start(":1323"); err != nil && err != http.ErrServerClosed {
 			e.Logger.Fatal("Shutting down server due to an error: ", err)
-		} 
+		}
 	}()
 
 	quit := make(chan os.Signal, 1)
@@ -81,4 +82,3 @@ func main() {
 	log.Println("Server exited gracefully.")
 
 }
-
