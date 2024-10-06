@@ -11,7 +11,7 @@ import (
 )
 
 type AdminHandler struct {
-	service services.AdminService
+	Repository *services.AdminRepository
 }
 
 func (h *AdminHandler) GetAdminLoginPage() echo.HandlerFunc {
@@ -25,7 +25,7 @@ func (h *AdminHandler) ProcessHandler() echo.HandlerFunc {
 		username := c.FormValue("username")
 		password := c.FormValue("password")
 
-		admin, err := h.service.CheckAdminExists(username)
+		admin, err := h.Repository.CheckAdminExists(username)
 		if err != nil {
 			return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid credentials"})
 		}
@@ -67,7 +67,7 @@ func (h *AdminHandler) AdminJWTMiddleware() echo.MiddlewareFunc {
 
 func (h *AdminHandler) GetListOfPosts() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		posts, err := h.service.GetAllPostsForAdmin()
+		posts, err := h.Repository.GetAllPostsForAdmin()
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve posts"})
 		}
@@ -81,7 +81,7 @@ func (h *AdminHandler) GetPostToPreview() echo.HandlerFunc {
 		if err != nil {
 			return err
 		}
-		post, err := h.service.GetPostByID(id)
+		post, err := h.Repository.AdminGetPostByID(id)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve post to preview"})
 		}
@@ -92,7 +92,7 @@ func (h *AdminHandler) GetPostToPreview() echo.HandlerFunc {
 func (h *AdminHandler) CreatePost() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		post := parsePostFromRequest(c)
-		err := h.service.CreatePost(post)
+		err := h.Repository.CreatePost(post)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to create post"})
 		}
@@ -107,7 +107,7 @@ func (h *AdminHandler) UpdatePost() echo.HandlerFunc {
 			return err
 		}
 		post := parsePostFromRequest(c)
-		err = h.service.UpdatePost(id, post)
+		err = h.Repository.UpdatePost(id, post)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve post to update"})
 		}
@@ -121,7 +121,7 @@ func (h *AdminHandler) DeletePost() echo.HandlerFunc {
 		if err != nil {
 			return err
 		}
-		err = h.service.DeletePost(id)
+		err = h.Repository.DeletePost(id)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve post to delete"})
 		}
@@ -131,7 +131,7 @@ func (h *AdminHandler) DeletePost() echo.HandlerFunc {
 
 func (h *AdminHandler) GetListOfCategories() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		categories, err := h.service.AdminGetAllCategories()
+		categories, err := h.Repository.AdminGetAllCategories()
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve categories"})
 		}
@@ -144,7 +144,7 @@ func (h *AdminHandler) CreateCategory() echo.HandlerFunc {
 		newCategory := types.Category{
 			Name: c.FormValue("name"),
 		}
-		err := h.service.CreateCategory(newCategory)
+		err := h.Repository.CreateCategory(newCategory)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to create category"})
 		}
@@ -158,7 +158,7 @@ func (h *AdminHandler) DeleteCategory() echo.HandlerFunc {
 		if err != nil {
 			return err
 		}
-		err = h.service.DeleteCategory(id)
+		err = h.Repository.DeleteCategory(id)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to delete category"})
 		}

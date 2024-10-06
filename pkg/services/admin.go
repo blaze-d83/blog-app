@@ -12,19 +12,7 @@ type AdminRepository struct {
 	db *mysql.Database
 }
 
-type AdminService interface {
-	CheckAdminExists(username string) (*types.Admin, error)
-	GetAllPostsForAdmin() ([]types.AdminPostListView, error)
-	GetPostByID(id uint) (types.Post, error)
-	CreatePost(post types.Post) error
-	UpdatePost(postID uint, updatedPost types.Post) error
-	DeletePost(postID uint) error
-	AdminGetAllCategories() ([]types.Category, error)
-	CreateCategory(category types.Category) error
-	DeleteCategory(id uint) error
-}
-
-func NewAdminService(db *mysql.Database) *AdminRepository {
+func NewAdminRepository(db *mysql.Database) *AdminRepository {
 	return &AdminRepository{db: db}
 }
 

@@ -7,16 +7,11 @@ import (
 	"github.com/blaze-d83/blog-app/pkg/types"
 )
 
-type PublicService interface {
-	GetAllPosts() ([]types.UserPostListView, error)
-	GetPostsByID(id uint) (types.Post, error)
-}
-
 type UserRepository struct {
 	db *mysql.Database
 }
 
-func  NewUserService(db *mysql.Database) *UserRepository {
+func  NewUserRepository(db *mysql.Database) *UserRepository {
 	return &UserRepository{
 		db: db,
 	}

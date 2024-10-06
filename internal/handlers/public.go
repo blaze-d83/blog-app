@@ -9,12 +9,12 @@ import (
 )
 
 type PublicHandler struct {
-	service services.PublicService
+	Repository *services.UserRepository
 }
 
 func (h *PublicHandler) GetListOfAllPostsHandler() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		posts, err := h.service.GetAllPosts()
+		posts, err := h.Repository.GetAllPosts()
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve posts"})
 		}
@@ -28,7 +28,7 @@ func (h *PublicHandler) ViewFullPostHandler() echo.HandlerFunc {
 		if err != nil {
 			return err
 		}
-		post, err := h.service.GetPostsByID(uint(id))
+		post, err := h.Repository.GetPostByID(id)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve posts"})
 		}

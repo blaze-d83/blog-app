@@ -52,11 +52,9 @@ func main() {
 	e.Use(middleware.Recover())
 
 	// Initialize services and handlers
-	publicService := services.NewUserService(dbInstance)
-	publicHandler := &handlers.PublicHandler{service: publicService}
+	publicService := services.NewUserRepository(dbInstance)
 
-	adminService := services.NewAdminService(dbInstance)
-	adminHandler := &handlers.AdminHandler{service: adminService}
+	adminService := services.NewAdminRepository(dbInstance)
 
 	// Register routes
 
