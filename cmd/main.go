@@ -2,11 +2,11 @@ package main
 
 import (
 	"context"
-	"log"
+	"fmt"
+	"io"
 	"net/http"
 	"os"
 	"os/signal"
-	"strings"
 	"syscall"
 	"time"
 
@@ -19,29 +19,49 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
+// Entry Point of the Application
 func main() {
-
-	if len(os.Args) > 2 && strings.ToLower(os.Args[1]) == "create" && strings.ToLower(os.Args[2]) == "superuser" {
-		services.InitCmd()
-		services.Execute()
-		return
+	ctx := context.Background()
+	if err := run(ctx, os.Stdout, os.Stderr, os.Args); err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(1)
 	}
+}
 
+func run(ctx context.Context, stdout, stderr io.Writer, args []string) error {
+
+	/**
+	 * Main logic of the application.
+	 * Accepts a context, writers for stdout and stderr, and the command-line arguments (args).
+	 * We also set up a signal handler to gracefully shut down the application when receiving interrupt signals.
+	 */
+
+	ctx, cancel := signal.NotifyContext(ctx, os.Interrupt, syscall.SIGTERM)
+	defer cancel()
+
+	// Intialize the database connection to MySQL
 	dbInstance := mysql.InitDB()
 	defer func() {
 		sqlDB, err := dbInstance.DB.DB()
 		if err != nil {
-			log.Println("Failed to obtain db connection for closing: ", err)
+			fmt.Fprintf(stderr, "Failed to obtain db connection for closing: %v\n", err)
 			return
 		}
 		if err := sqlDB.Close(); err != nil {
-			log.Println("Failed to close the database connection: ", err)
+			fmt.Fprintf(stderr, "Failed to close database connection: %v\n", err)
 		} else {
-			log.Println("Database connection closed successfullly: ", err)
+			fmt.Fprintf(stdout, "Database connection closed successfully.\n")
 		}
 	}()
 
-	// Create new echo instance
+	 // CLI-based superuser creation.
+	if len(args) > 2 && args[1] == "create" && args[2] == "superuser" {
+		services.InitCmd(dbInstance)
+		services.Execute()
+		return nil
+	}
+
+	// Initialize a new echo server
 	e := echo.New()
 
 	// Setup custom logger and recovery middleware
@@ -66,19 +86,19 @@ func main() {
 		}
 	}()
 
-	quit := make(chan os.Signal, 1)
-	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	// Block until we receive a signal (CTRL+C or system signal)
+	<-ctx.Done()
 
-	<-quit
+	// Graceful shutdown
+	fmt.Fprintf(stdout, "Shutting down server gracefully...")
+	shutdownCtx, cancelShutdown := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancelShutdown()
 
-	log.Println("Shutting down server gracefully...")
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
-	if err := e.Shutdown(ctx); err != nil {
-		e.Logger.Fatal("Server shutdown failed", err)
+	if err := e.Shutdown(shutdownCtx); err != nil {
+		return fmt.Errorf("server shutdown failed: %v", err)
 	}
 
-	log.Println("Server exited gracefully.")
+	fmt.Fprintf(stdout, "Server exited gracefully.")
+	return nil
 
 }
