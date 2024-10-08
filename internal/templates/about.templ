@@ -1,0 +1,13 @@
+package templates
+
+import (
+	"github.com/blaze-d83/blog-app/internal/templates/components"
+)
+
+templ AboutPage() {
+	@Page("AboutPage") {
+		<div>
+			@components.Header("Welcome to About Page")
+		</div>
+	}
+}

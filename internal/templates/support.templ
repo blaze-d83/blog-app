@@ -1,0 +1,13 @@
+package templates
+
+import (
+	"github.com/blaze-d83/blog-app/internal/templates/components"
+)
+
+templ SupportPage() {
+	@Page("Support") {
+		<div>
+			@components.Header("Welcome to Support Page!")
+		</div>
+	}
+}

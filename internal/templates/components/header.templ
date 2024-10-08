@@ -1,9 +1,9 @@
-package templates
+package components
 
-templ Header() {
-	<div class="bg-gray-800 text-white shadow-md">
-		<div class="container mx-auto px-4 flex justify-between items-center">
-         
-        </div>
+templ Header(text string) {
+	<div id="header" class="bg-gray-800 text-white shadow-md">
+		<div id="container" class="container mx-auto px-4 flex justify-between items-center">
+			{ text }
+		</div>
 	</div>
 }

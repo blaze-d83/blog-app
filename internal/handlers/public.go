@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/blaze-d83/blog-app/internal/templates"
 	"github.com/blaze-d83/blog-app/pkg/services"
 	"github.com/blaze-d83/blog-app/pkg/utils"
 	"github.com/labstack/echo/v4"
@@ -10,6 +11,52 @@ import (
 
 type PublicHandler struct {
 	Repository *services.UserRepository
+}
+
+func (h *PublicHandler) Homepage() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		homePage := templates.HomePage()
+		if err := homePage.Render(c.Request().Context(), c.Response().Writer); err != nil {
+			return  c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to render home page"})
+		}
+		return nil
+	}
+}
+
+func (h *PublicHandler) Shop() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		return nil
+	}
+}
+
+func (h *PublicHandler) About() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		aboutPage := templates.AboutPage()
+		if err := aboutPage.Render(c.Request().Context(), c.Response().Writer); err != nil {
+			return  c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to render about page"})
+		}
+		return nil
+	}
+}
+
+func (h *PublicHandler) Support() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		supportPage := templates.SupportPage()
+		if err := supportPage.Render(c.Request().Context(), c.Response().Writer); err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to render support page"})
+		}
+		return nil
+	}
+}
+
+func (h *PublicHandler) Events() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		eventsPage := templates.EventsPage()
+		if err := eventsPage.Render(c.Request().Context(), c.Response().Writer); err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to render events page"})
+		}
+		return  nil
+	}
 }
 
 func (h *PublicHandler) GetListOfAllPostsHandler() echo.HandlerFunc {

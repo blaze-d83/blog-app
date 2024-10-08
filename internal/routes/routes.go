@@ -7,8 +7,15 @@ import (
 
 func RegisterRoutes(e *echo.Echo, adminHandler *handlers.AdminHandler, publicHandler *handlers.PublicHandler) {
 
+	// Static files
+	e.Static("/static", "/static/dist/")
+
 	// Public Routes
-	e.GET("/", publicHandler.GetListOfAllPostsHandler())
+	e.GET("/home", publicHandler.Homepage())
+	e.GET("/about", publicHandler.About())
+	e.GET("/support", publicHandler.Support())
+	e.GET("/events", publicHandler.Events())
+	e.GET("/posts", publicHandler.GetListOfAllPostsHandler())
 	e.GET("/post", publicHandler.ViewFullPostHandler())
 	
 
