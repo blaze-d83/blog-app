@@ -1,0 +1,40 @@
+package components
+
+templ LoginForm() {
+	<!-- Updated form layout with full width and center alignment -->
+	<div class="bg-white p-8 border border-gray-300 shadow-lg rounded-lg w-full">
+		<h2 class="text-2xl font-bold mb-6 text-center">
+			Login
+		</h2>
+		<form action="/admin/login" method="post">
+			@LoginInput("text", "username", "username", "Username")
+			@LoginInput("password", "password", "password", "Password")
+			@SubmitButton()
+		</form>
+	</div>
+}
+
+templ LoginInput(inputType, id, name, placeholder string) {
+	<div class="mb-4">
+		<label for={ id } class="block text-sm font-medium text-gray-700">
+			{ placeholder }
+		</label>
+		<input
+			type={ inputType }
+			id={ id }
+			name={ name }
+			class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+			placeholder={ placeholder }
+			required
+		/>
+	</div>
+}
+
+templ SubmitButton() {
+	<button
+		type="submit"
+		class="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-indigo-500 focus:ring-offset-2"
+	>
+		Submit
+	</button>
+}

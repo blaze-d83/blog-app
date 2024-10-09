@@ -20,7 +20,7 @@ func RegisterRoutes(e *echo.Echo, adminHandler *handlers.AdminHandler, publicHan
 	
 
 	// Admin Routes
-	e.GET("/admin/login", adminHandler.GetAdminLoginPage())
+	e.GET("/admin/login", adminHandler.LoginPage())
 	e.POST("/admin/login", adminHandler.ProcessHandler())
 
 	// Protected Admin Routes - JWT Middleware

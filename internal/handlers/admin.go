@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/blaze-d83/blog-app/internal/templates"
 	"github.com/blaze-d83/blog-app/pkg/auth"
 	"github.com/blaze-d83/blog-app/pkg/services"
 	"github.com/blaze-d83/blog-app/pkg/types"
@@ -14,8 +15,12 @@ type AdminHandler struct {
 	Repository *services.AdminRepository
 }
 
-func (h *AdminHandler) GetAdminLoginPage() echo.HandlerFunc {
+func (h *AdminHandler) LoginPage() echo.HandlerFunc {
 	return func(c echo.Context) error {
+		loginPage := templates.LoginPage()
+		if err := loginPage.Render(c.Request().Context(), c.Response()); err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to render login page"})
+		}
 		return nil
 	}
 }

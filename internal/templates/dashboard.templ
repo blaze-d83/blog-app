@@ -1,0 +1,14 @@
+
+package templates
+
+import (
+	"github.com/blaze-d83/blog-app/internal/templates/components"
+)
+
+templ AdminDashboard() {
+	@Page("Admin Dashboard") {
+		<div>
+			@components.Header("Welcome to Admin Dashboard")
+		</div>
+	}
+}

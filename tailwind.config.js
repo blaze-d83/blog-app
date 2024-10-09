@@ -5,7 +5,11 @@ module.exports = {
         "./internal/templates/components/*.{html, js, templ, go}",
     ],
   theme: {
-    extend: {},
+    extend: {
+            fontFamily: {
+                neurial: ['Neurial Grotesk', 'sans-serif'],
+            }
+        },
   },
   plugins: [],
 }

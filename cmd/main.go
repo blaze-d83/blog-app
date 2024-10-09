@@ -90,7 +90,7 @@ func run(ctx context.Context, stdout, stderr io.Writer, args []string) error {
 	<-ctx.Done()
 
 	// Graceful shutdown
-	fmt.Fprintf(stdout, "Shutting down server gracefully...")
+	fmt.Fprintf(stdout, "Shutting down server gracefully...\n")
 	shutdownCtx, cancelShutdown := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancelShutdown()
 
@@ -98,7 +98,7 @@ func run(ctx context.Context, stdout, stderr io.Writer, args []string) error {
 		return fmt.Errorf("server shutdown failed: %v", err)
 	}
 
-	fmt.Fprintf(stdout, "Server exited gracefully.")
+	fmt.Fprintf(stdout, "Server exited gracefully.\n")
 	return nil
 
 }
