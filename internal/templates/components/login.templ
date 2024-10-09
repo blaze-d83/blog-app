@@ -7,14 +7,14 @@ templ LoginForm() {
 			Login
 		</h2>
 		<form action="/admin/login" method="post">
-			@LoginInput("text", "username", "username", "Username")
-			@LoginInput("password", "password", "password", "Password")
+			@LoginInput("text", "username", "username", "username", "Username")
+			@LoginInput("password", "password", "password", "current-password", "Password")
 			@SubmitButton()
 		</form>
 	</div>
 }
 
-templ LoginInput(inputType, id, name, placeholder string) {
+templ LoginInput(inputType, id, name, autocomplete, placeholder string) {
 	<div class="mb-4">
 		<label for={ id } class="block text-sm font-medium text-gray-700">
 			{ placeholder }
@@ -23,6 +23,7 @@ templ LoginInput(inputType, id, name, placeholder string) {
 			type={ inputType }
 			id={ id }
 			name={ name }
+			autocomplete={ autocomplete }
 			class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
 			placeholder={ placeholder }
 			required

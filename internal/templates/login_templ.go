@@ -42,7 +42,7 @@ func LoginPage() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"min-h-screen bg-gray-800 flex flex-col justify-center items-center\"><!-- Centered login container --><div id=\"login-container\" class=\"w-full max-w-lg\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"min-h-screen bg-gray-800 flex flex-col justify-center items-center\"><div id=\"login-container\" class=\"w-full max-w-lg\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
