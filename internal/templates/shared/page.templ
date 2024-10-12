@@ -1,5 +1,4 @@
-
-package templates
+package shared 
 
 templ Page(title string) {
 	<!DOCTYPE html>
@@ -9,7 +8,7 @@ templ Page(title string) {
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<link rel="stylesheet" href="/static/dist/output.css"/>
-	</head>
+		</head>
 		<body class="bg-white font-neurial font-light text-gray-800">
 			{ children... }
 		</body>

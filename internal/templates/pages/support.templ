@@ -2,10 +2,11 @@ package templates
 
 import (
 	"github.com/blaze-d83/blog-app/internal/templates/components"
+	"github.com/blaze-d83/blog-app/internal/templates/shared"
 )
 
 templ SupportPage() {
-	@Page("Support") {
+	@shared.Page("Support") {
 		<div>
 			@components.Header("Welcome to Support Page!")
 		</div>

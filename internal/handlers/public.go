@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/blaze-d83/blog-app/internal/templates"
+	templates "github.com/blaze-d83/blog-app/internal/templates/pages"
 	"github.com/blaze-d83/blog-app/pkg/services"
 	"github.com/blaze-d83/blog-app/pkg/utils"
 	"github.com/labstack/echo/v4"

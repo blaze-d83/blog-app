@@ -3,10 +3,11 @@ package templates
 
 import (
 	"github.com/blaze-d83/blog-app/internal/templates/components"
+	"github.com/blaze-d83/blog-app/internal/templates/shared"
 )
 
 templ EventsPage() {
-	@Page("Events") {
+	@shared.Page("Events") {
 		<div>
 			@components.Header("Welcome to Events Page!")
 		</div>

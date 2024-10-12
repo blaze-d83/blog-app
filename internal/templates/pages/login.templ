@@ -2,10 +2,11 @@ package templates
 
 import (
 	"github.com/blaze-d83/blog-app/internal/templates/components"
+	"github.com/blaze-d83/blog-app/internal/templates/shared"
 )
 
 templ LoginPage() {
-	@Page("Login") {
+	@shared.Page("LoginPage") {
 		<div class="min-h-screen bg-gray-800 flex flex-col justify-center items-center">
 			<div id="login-container" class="w-full max-w-lg">
 				@components.LoginForm()
