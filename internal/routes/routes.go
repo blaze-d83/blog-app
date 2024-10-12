@@ -25,6 +25,7 @@ func RegisterRoutes(e *echo.Echo, adminHandler *handlers.AdminHandler, publicHan
 
 	// Protected Admin Routes - JWT Middleware
 	adminGroup := e.Group("/admin", adminHandler.AdminJWTMiddleware())
+	adminGroup.GET("/dashboard", adminHandler.AdminDashboard())
 	adminGroup.GET("/posts", adminHandler.GetListOfPosts())
 	adminGroup.POST("/post", adminHandler.CreatePost())
 	adminGroup.GET("/post/:id", adminHandler.GetPostToPreview())

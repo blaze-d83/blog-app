@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"time"
 
 	templates "github.com/blaze-d83/blog-app/internal/templates/pages"
 	"github.com/blaze-d83/blog-app/pkg/auth"
@@ -20,6 +21,16 @@ func (h *AdminHandler) LoginPage() echo.HandlerFunc {
 		loginPage := templates.LoginPage()
 		if err := loginPage.Render(c.Request().Context(), c.Response()); err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to render login page"})
+		}
+		return nil
+	}
+}
+
+func (h *AdminHandler) AdminDashboard() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		dashboard := templates.AdminDashboard()
+		if err := dashboard.Render(c.Request().Context(), c.Response()); err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to render admin dashboard"})
 		}
 		return nil
 	}
@@ -45,25 +56,32 @@ func (h *AdminHandler) ProcessHandler() echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Could not generate token"})
 		}
 
-		return c.JSON(http.StatusOK, map[string]string{
-			"token": token,
-		})
+		cookie := &http.Cookie{
+			Name:     "auth_token",
+			Value:    token,
+			Path:     "",
+			Expires:  time.Now().Add(24 * time.Hour),
+			Secure:   false,
+			HttpOnly: false,
+		}
+		c.SetCookie(cookie)
+
+		return c.Redirect(http.StatusSeeOther, "/admin/dashboard")
 	}
 }
 
 func (h *AdminHandler) AdminJWTMiddleware() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
-			token := c.Request().Header.Get("Authorization")
-			if token == "" {
+			cookie, err := c.Cookie("auth_token")
+			if err != nil {
 				return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Missing or invalid token"})
 			}
-			claims, err := auth.ValidateJWT(token)
+			claims, err := auth.ValidateJWT(cookie.Value)
 			if err != nil {
-				return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid or expired token"})
+				return c.JSON(http.StatusUnauthorized, map[string]string{"error": err.Error()})
 			}
 			c.Set("username", claims.Username)
-
 			return next(c)
 		}
 	}
@@ -170,6 +188,12 @@ func (h *AdminHandler) DeleteCategory() echo.HandlerFunc {
 		return c.JSON(http.StatusOK, map[string]string{"message": "Category deleted successfully"})
 	}
 }
+
+/*
+------------------------------------------------
+				Local Utilities
+------------------------------------------------
+*/
 
 func parsePostFromRequest(c echo.Context) types.Post {
 	return types.Post{
