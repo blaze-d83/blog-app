@@ -13,6 +13,7 @@ import (
 	"github.com/blaze-d83/blog-app/internal/handlers"
 	"github.com/blaze-d83/blog-app/internal/routes"
 	"github.com/blaze-d83/blog-app/pkg/logger"
+	middleware_service "github.com/blaze-d83/blog-app/pkg/middleware"
 	"github.com/blaze-d83/blog-app/pkg/mysql"
 	"github.com/blaze-d83/blog-app/pkg/services"
 	"github.com/labstack/echo/v4"
@@ -54,7 +55,7 @@ func run(ctx context.Context, stdout, stderr io.Writer, args []string) error {
 		}
 	}()
 
-	 // CLI-based superuser creation.
+	// CLI-based superuser creation.
 	if len(args) > 2 && args[1] == "create" && args[2] == "superuser" {
 		services.InitCmd(dbInstance)
 		services.Execute()
@@ -65,9 +66,9 @@ func run(ctx context.Context, stdout, stderr io.Writer, args []string) error {
 	e := echo.New()
 
 	// Setup custom logger and recovery middleware
-	customLoggerConfig := logger.GetCustomLoggerConfig(e)
-	e.Use(middleware.RequestLoggerWithConfig(*customLoggerConfig))
-	e.Use(middleware.Recover())
+	customLogger := logger.NewCustomLogger()
+
+	e.Use(middleware.RequestID())
 
 	// Initialize repositories (services)
 	publicRepo := services.NewUserRepository(dbInstance)
