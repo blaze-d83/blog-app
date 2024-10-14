@@ -13,11 +13,11 @@ import (
 	"github.com/blaze-d83/blog-app/internal/handlers"
 	"github.com/blaze-d83/blog-app/internal/routes"
 	"github.com/blaze-d83/blog-app/pkg/logger"
-	middleware_service "github.com/blaze-d83/blog-app/pkg/middleware"
+	middleware "github.com/blaze-d83/blog-app/pkg/middleware"
 	"github.com/blaze-d83/blog-app/pkg/mysql"
 	"github.com/blaze-d83/blog-app/pkg/services"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
+	echoMiddleware "github.com/labstack/echo/v4/middleware"
 )
 
 // Entry Point of the Application
@@ -68,7 +68,14 @@ func run(ctx context.Context, stdout, stderr io.Writer, args []string) error {
 	// Setup custom logger and recovery middleware
 	customLogger := logger.NewCustomLogger()
 
-	e.Use(middleware.RequestID())
+	// Initialize custom middleware
+	mw := middleware.Middleware{}
+
+	// User echo's default RequestID middleware
+	e.Use(echoMiddleware.RequestID())
+
+	// Use sutom logging middleware globally
+	e.Use(mw.LoggingMiddleware(customLogger))
 
 	// Initialize repositories (services)
 	publicRepo := services.NewUserRepository(dbInstance)
@@ -79,7 +86,7 @@ func run(ctx context.Context, stdout, stderr io.Writer, args []string) error {
 	adminHandler := &handlers.AdminHandler{Repository: adminRepo}
 
 	// Register routes
-	routes.RegisterRoutes(e, adminHandler, publicHandler)
+	routes.SetupRouter(e, adminHandler, publicHandler, mw)
 
 	go func() {
 		if err := e.Start(":1323"); err != nil && err != http.ErrServerClosed {

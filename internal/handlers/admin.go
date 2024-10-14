@@ -36,7 +36,7 @@ func (h *AdminHandler) AdminDashboard() echo.HandlerFunc {
 	}
 }
 
-func (h *AdminHandler) ProcessHandler() echo.HandlerFunc {
+func (h *AdminHandler) ProcessLogin() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		username := c.FormValue("username")
 		password := c.FormValue("password")
@@ -68,24 +68,6 @@ func (h *AdminHandler) ProcessHandler() echo.HandlerFunc {
 
 		return c.Redirect(http.StatusSeeOther, "/admin/dashboard")
 	}
-}
-
-func (h *AdminHandler) AdminJWTMiddleware() echo.MiddlewareFunc {
-	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
-			cookie, err := c.Cookie("auth_token")
-			if err != nil {
-				return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Missing or invalid token"})
-			}
-			claims, err := auth.ValidateJWT(cookie.Value)
-			if err != nil {
-				return c.JSON(http.StatusUnauthorized, map[string]string{"error": err.Error()})
-			}
-			c.Set("username", claims.Username)
-			return next(c)
-		}
-	}
-
 }
 
 func (h *AdminHandler) GetListOfPosts() echo.HandlerFunc {

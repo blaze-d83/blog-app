@@ -2,10 +2,14 @@ package routes
 
 import (
 	"github.com/blaze-d83/blog-app/internal/handlers"
+	"github.com/blaze-d83/blog-app/pkg/middleware"
 	"github.com/labstack/echo/v4"
 )
 
-func RegisterRoutes(e *echo.Echo, adminHandler *handlers.AdminHandler, publicHandler *handlers.PublicHandler) {
+func SetupRouter(e *echo.Echo,
+	adminHandler *handlers.AdminHandler,
+	publicHandler *handlers.PublicHandler,
+	m middleware.Middleware) {
 
 	// Static files
 	e.Static("/static/dist", "./static/dist/")
@@ -17,14 +21,13 @@ func RegisterRoutes(e *echo.Echo, adminHandler *handlers.AdminHandler, publicHan
 	e.GET("/events", publicHandler.Events())
 	e.GET("/posts", publicHandler.GetListOfAllPostsHandler())
 	e.GET("/post", publicHandler.ViewFullPostHandler())
-	
 
 	// Admin Routes
 	e.GET("/admin/login", adminHandler.LoginPage())
-	e.POST("/admin/login", adminHandler.ProcessHandler())
+	e.POST("/admin/login", adminHandler.ProcessLogin())
 
 	// Protected Admin Routes - JWT Middleware
-	adminGroup := e.Group("/admin", adminHandler.AdminJWTMiddleware())
+	adminGroup := e.Group("/admin", m.AdminJWTMiddleware())
 	adminGroup.GET("/dashboard", adminHandler.AdminDashboard())
 	adminGroup.GET("/posts", adminHandler.GetListOfPosts())
 	adminGroup.POST("/post", adminHandler.CreatePost())
