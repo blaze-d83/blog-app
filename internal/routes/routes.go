@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"net/http"
+
 	"github.com/blaze-d83/blog-app/internal/handlers"
 	"github.com/blaze-d83/blog-app/pkg/middleware"
 	"github.com/labstack/echo/v4"
@@ -11,11 +13,16 @@ func SetupRouter(e *echo.Echo,
 	publicHandler *handlers.PublicHandler,
 	m middleware.Middleware) {
 
+	// Catch and log unregistered routes
+	e.Any("/*", func(c echo.Context) error {
+		return c.JSON(http.StatusNotFound, map[string]string{"error": "Not found"})
+	})
+
 	// Static files
-	e.Static("/static/dist", "./static/dist/")
+	e.Static("/static", "./static")
 
 	// Public Routes
-	e.GET("/home", publicHandler.Homepage())
+	e.GET("/", publicHandler.Homepage())
 	e.GET("/about", publicHandler.About())
 	e.GET("/support", publicHandler.Support())
 	e.GET("/events", publicHandler.Events())

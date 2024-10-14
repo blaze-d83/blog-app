@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"log/slog"
 	"net/http"
 	"time"
 
@@ -35,6 +36,15 @@ func (m Middleware) LoggingMiddleware(logger *logger.CustomLogger) echo.Middlewa
 
 			// Start the time of request
 			start := time.Now()
+
+			// Check for empty path and log additional details
+			if c.Request().URL.Path == "" {
+				logger.LogEvent("Empty path request detected",
+					slog.Attr{Key: "method", Value: slog.StringValue(c.Request().Method)},
+					slog.Attr{Key: "remote_addr", Value: slog.StringValue(c.Request().RemoteAddr)},
+					slog.Attr{Key: "user_agent", Value: slog.StringValue(c.Request().UserAgent())},
+				)
+			}
 
 			// Log the incoming request
 			logger.LogRequest(c)
