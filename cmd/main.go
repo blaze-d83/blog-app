@@ -78,17 +78,18 @@ func run(ctx context.Context, stdout, stderr io.Writer, args []string) error {
 	e.Use(mw.LoggingMiddleware(customLogger))
 
 	// Initialize repositories (services)
-	publicRepo := services.NewUserRepository(dbInstance)
 	adminRepo := services.NewAdminRepository(dbInstance)
+	publicRepo := services.NewUserRepository(dbInstance)
 
 	// Initialize the handlers with repositories
-	publicHandler := &handlers.PublicHandler{Repository: publicRepo}
-	adminHandler := &handlers.AdminHandler{Repository: adminRepo}
+	adminHandler := handlers.NewAdminHandler(adminRepo, *customLogger)
+	publicHandler := handlers.NewPublicHandler(publicRepo, *customLogger)
 
 	// Register routes
 	routes.SetupRouter(e, adminHandler, publicHandler, mw)
 
 	go func() {
+		customLogger.LogEvent("Starting server on port 1323...")
 		if err := e.Start(":1323"); err != nil && err != http.ErrServerClosed {
 			e.Logger.Fatal("Shutting down server due to an error: ", err)
 		}

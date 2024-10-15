@@ -19,7 +19,7 @@ func SetupRouter(e *echo.Echo,
 	})
 
 	// Static files
-	e.Static("/static", "./static")
+	e.Static("/static", "./static/*/**")
 
 	// Public Routes
 	e.GET("/", publicHandler.Homepage())
