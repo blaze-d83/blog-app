@@ -9,9 +9,9 @@ type Admin struct {
 	Pass     string `gorm:"not null"`
 }
 
-
 type AdminPostListView struct {
+	ID        uint
 	Title     string    `json:"title"`
-	Date      time.Time   `json:"date"`
+	Date      time.Time `json:"date"`
 	CreatedAt time.Time `json:"created_at"`
 }

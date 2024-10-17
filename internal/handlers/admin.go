@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/blaze-d83/blog-app/internal/templates/components"
 	templates "github.com/blaze-d83/blog-app/internal/templates/pages"
 	"github.com/blaze-d83/blog-app/pkg/auth"
 	"github.com/blaze-d83/blog-app/pkg/logger"

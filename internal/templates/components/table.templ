@@ -1,0 +1,27 @@
+package components
+
+import (
+	"github.com/blaze-d83/blog-app/pkg/types"
+)
+
+templ PostsTable(posts *[]types.AdminPostListView) {
+	<table class="min-w-full-table-auto text-left bg-white shadow-md rounded-lg">
+		<thead class="bg-gray-50">
+			<tr>
+				<th class="px-6 py-3 text-gray-700 uppercase tracking-wider">ID</th>
+				<th class="px-6 py-3 text-gray-700 uppercase tracking-wider">Title</th>
+				<th class="px-6 py-3 text-gray-700 uppercase tracking-wider">Date</th>
+				<th class="px-6 py-3 text-gray-700 uppercase tracking-wider">Created</th>
+			</tr>
+		</thead>
+		<tbody>
+			for _, post := range posts {
+				<td class="px-6 py-4">{ post.ID }</td>
+				<td class="px-6 py-4">{ post.Title }</td>
+				<td class="px-6 py-4">{ post.Date }</td>
+				<td class="px-6 py-4">{ post.CreatedAt }</td>
+				<td class="px-6 py-4">{ post.CreatedAt }</td>
+			}
+		</tbody>
+	</table>
+}
