@@ -2,9 +2,10 @@ package components
 
 import (
 	"github.com/blaze-d83/blog-app/pkg/types"
+	"github.com/blaze-d83/blog-app/pkg/utils"
 )
 
-templ PostsTable(posts *[]types.AdminPostListView) {
+templ PostsTable(posts []types.AdminPostListView) {
 	<table class="min-w-full-table-auto text-left bg-white shadow-md rounded-lg">
 		<thead class="bg-gray-50">
 			<tr>
@@ -16,11 +17,10 @@ templ PostsTable(posts *[]types.AdminPostListView) {
 		</thead>
 		<tbody>
 			for _, post := range posts {
-				<td class="px-6 py-4">{ post.ID }</td>
+				<td class="px-6 py-4">{ utils.UintToString(post.ID) }</td>
 				<td class="px-6 py-4">{ post.Title }</td>
-				<td class="px-6 py-4">{ post.Date }</td>
-				<td class="px-6 py-4">{ post.CreatedAt }</td>
-				<td class="px-6 py-4">{ post.CreatedAt }</td>
+				<td class="px-6 py-4">{ utils.FormatTime(post.Date) }</td>
+				<td class="px-6 py-4">{ utils.FormatTime(post.CreatedAt) }</td>
 			}
 		</tbody>
 	</table>

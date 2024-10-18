@@ -10,7 +10,7 @@ type Admin struct {
 }
 
 type AdminPostListView struct {
-	ID        uint
+	ID        uint      `json:"id"`
 	Title     string    `json:"title"`
 	Date      time.Time `json:"date"`
 	CreatedAt time.Time `json:"created_at"`

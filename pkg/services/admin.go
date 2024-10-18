@@ -31,7 +31,7 @@ func (repo *AdminRepository) CheckAdminExists(username string) (*types.Admin, er
 func (repo *AdminRepository) GetAllPostsForAdmin() ([]types.AdminPostListView, error) {
 	var adminPosts []types.AdminPostListView
 	result := repo.db.DB.Model(&types.Post{}).
-		Select("title", "date", "created_at").
+		Select("id", "title", "date", "created_at").
 		Scan(&adminPosts)
 	if result.Error != nil {
 		return nil, result.Error

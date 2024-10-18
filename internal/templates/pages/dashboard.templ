@@ -11,5 +11,7 @@ templ AdminDashboard() {
 		<div>
 			@components.Header("Welcome to Admin Dashboard")
 		</div>
+		<div id="table-container" hx-get="/posts"  hx-trigger="load">
+		</div>
 	}
 }

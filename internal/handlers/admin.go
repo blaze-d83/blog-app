@@ -33,6 +33,7 @@ func (h *AdminHandler) LoginPage() echo.HandlerFunc {
 			h.Logger.LogError(c, err)
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to render login page"})
 		}
+		h.Logger.LogEvent("Login Page rendered successfully")
 		return nil
 	}
 }
@@ -92,7 +93,12 @@ func (h *AdminHandler) GetListOfPosts() echo.HandlerFunc {
 			h.Logger.LogError(c, err)
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve posts"})
 		}
-		return c.JSON(http.StatusOK, posts)
+		postsTable := components.PostsTable(posts)
+		if err == postsTable.Render(c.Request().Context(), c.Response()) {
+			h.Logger.LogError(c, err)
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to render posts table"})
+		}
+		return nil
 	}
 }
 
